@@ -6,7 +6,7 @@
 template < typename T, typename Allocator = std::allocator<T> >
 class	vector
 {
-	public:
+	private:
 		/** Member Types **/
 		typedef T 					value_type;
 		typedef Allocator				allocator_type;
@@ -21,8 +21,23 @@ class	vector
 		typedef std::reverse_iterator<iterator>		reverse_iterator;
 		typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
 
+		/** Member Attributes **/
+		pointer		_vector_ptr;
+		allocator_type	_allocator;
+		size_type	_size;
+		size_type	_capacity;
+	
+	public:
+
 		/** Constructors **/
-		explicit vector(const allocator_type& alloc = allocator_type());
+		explicit vector(const allocator_type& alloc = allocator_type())
+		{
+			this->_size = 0;
+			this->_capacity = 0;
+			this->_allocator = alloc;
+			return ;
+		}
+
 		explicit vector(size_type count, const_reference value = value_type(),
 			const allocator_type& alloc = allocator_type());
 		
@@ -33,7 +48,14 @@ class	vector
 		vector(const vector& other);
 
 		/** Destructor **/
-		~vector(void);
+		~vector(void)
+		{
+			// Destruir objectos con alloc.destroy()
+			// Liberar memoria con alloc.deallocate()
+			this->_size = 0;
+			this->_capacity = 0;
+			return ;
+		}
 
 		/** Assignation Operator **/
 		vector&			operator=(const vector& other);
@@ -49,12 +71,29 @@ class	vector
 		const_reverse_iterator	rend(void) const;
 
 		/** Capacity **/
-		size_type		size(void) const;
-		size_type		max_size(void) const;
-		size_type		capacity(void) const;
+		size_type		size(void) const
+		{
+			return (this->_size);
+		}
+
+		size_type		max_size(void) const
+		{
+			return (this->_allocator.max_size());
+		}
+
+		size_type		capacity(void) const
+		{
+			return (this->_capacity);
+		}
+
 		void			resize(size_type count, value_type value = value_type());
 		void			reserve(size_type new_cap);
-		bool			empty(void) const;
+		bool			empty(void) const
+		{
+			if (this->_size > 0)
+				return false;
+			return true;
+		}
 
 		/** Element access **/
 		reference		operator[](size_type pos);
@@ -85,7 +124,10 @@ class	vector
 		void			clear(void);
 
 		/** Allocator **/
-		allocator_type		get_allocator(void) const;
+		allocator_type		get_allocator(void) const
+		{
+			return (this->_allocator);
+		}
 };
 
 #endif

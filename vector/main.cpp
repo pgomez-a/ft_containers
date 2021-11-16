@@ -1,4 +1,5 @@
 #include <iostream>
+#include <vector>
 
 namespace ft
 {
@@ -7,7 +8,7 @@ namespace ft
 
 int	main(void)
 {
-	ft::vector<int>();
+	ft::vector<int>		vct;
 
 	return (0);
 }
