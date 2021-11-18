@@ -4,24 +4,34 @@
 
 void	leaks(void)
 {
-	system("leaks a.out");
+	system("leaks container");
 }
 
 int	main(void)
 {
-	std::size_t			val = 3;
-	ft::vector<int>			vct(val, 2);
-	ft::vector<int>::iterator	begin;
-	ft::vector<int>::iterator	end;
-
 	atexit(leaks);
 
-	begin = vct.begin();
-	end = vct.end();
-	while (begin != end)
 	{
-		std::cout << *begin << std::endl;
-		begin++;
+		std::cout << "STD::VECTOR" << std::endl;
+		std::size_t		val = 13;
+		std::vector<int>	vct(val, 3);
+
+		std::cout << "Size: " << vct.size() << std::endl;
+		std::cout << "Capa: " << vct.capacity() << std::endl;
+		vct.resize(32);
+		std::cout << "Size: " << vct.size() << std::endl;
+		std::cout << "Capa: " << vct.capacity() << std::endl;
+	}
+	{
+		std::cout << "FT::VECTOR" << std::endl;
+		std::size_t		val = 13;
+		ft::vector<int>		ft_vct(val, 3);
+		
+		std::cout << "Size: " << ft_vct.size() << std::endl;
+		std::cout << "Capa: " << ft_vct.capacity() << std::endl;
+		ft_vct.resize(32);
+		std::cout << "Size: " << ft_vct.size() << std::endl;
+		std::cout << "Capa: " << ft_vct.capacity() << std::endl;
 	}
 	return (0);
 }
