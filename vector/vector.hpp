@@ -32,6 +32,11 @@ struct	VectorIterator
 			return (*this);
 		}
 
+		difference_type	operator-(const VectorIterator& other) const
+		{
+			return (this->_ptr_it - other._ptr_it);
+		}
+
 		/** Operations **/
 		bool		operator==(const VectorIterator& other) const
 		{
@@ -334,7 +339,7 @@ class	vector
 		size_type		max_size(void) const
 		{
 			return (this->_allocator.max_size());
-		}
+		} // NOTE: Review
 
 		size_type		capacity(void) const
 		{
@@ -390,7 +395,7 @@ class	vector
 				this->_size = count;
 			}
 			return ;
-		}
+		} // NOTE: does not work
 
 		void			reserve(size_type new_cap)
 		{
@@ -422,8 +427,8 @@ class	vector
 		bool			empty(void) const
 		{
 			if (this->_size > 0)
-				return false;
-			return true;
+				return (false);
+			return (true);
 		}
 
 		/** Element access **/
@@ -469,21 +474,211 @@ class	vector
 
 		/** Modifiers **/
 		template < typename InputIt >
-		void			assign(InputIt first, InputIt last);
+		void			assign(InputIt first, InputIt last)
+		{
+			size_type	capacity;
+			pointer		modify_ptr;
 
-		void			assign(size_type count, const_reference value);
-		void			push_back(const_reference value);
-		void			pop_back(void);
-		iterator		insert(iterator pos, const_reference value);
-		void			insert(iterator pos, size_type count, const_reference value);
+			capacity = last - first;
+			if (capacity > this->_capacity)
+				this->resize(capacity);
+			this->_size = capacity;
+			modify_ptr = this->_vector_ptr;
+			while (first != last)
+			{
+				this->_allocator.destroy(modify_ptr);
+				this->_allocator.construct(modify_ptr, *first);
+				modify_ptr++;
+				first++;
+			}
+			return ;
+		}
+
+		void			assign(size_type count, const_reference value)
+		{
+			pointer		modify_ptr;
+
+			if (count > this->_capacity)
+				this->resize(count);
+			this->_size = count;
+			modify_ptr = this->_vector_ptr;
+			while (count > 0)
+			{
+				this->_allocator.destroy(modify_ptr);
+				this->_allocator.construct(modify_ptr, value);
+				modify_ptr++;
+				count--;
+			}
+			return ;
+		} // NOTE: Allocation does not multiply by 2 the capacity
+
+		void			push_back(const_reference value)
+		{
+			if (this->_size == this->_capacity)
+				this->resize(this->_size + 1);
+			else
+				this->_size += 1;
+			this->_allocator.construct(this->_vector_ptr + this->_size - 1, value);
+			return ;
+		}
+
+		void			pop_back(void)
+		{
+			if (this->_size > 0)
+			{
+				this->_size -= 1;
+				this->_allocator.destroy(this->_vector_ptr + this->_size);
+			}
+			return ;
+		}
+
+		iterator		insert(iterator pos, const_reference value)
+		{
+			difference_type	diff;
+			iterator	end;
+			pointer		modify_ptr;
+			
+
+			diff = pos - this->begin();
+			if (this->_size == this->_capacity)
+				this->resize(this->_size + 1);
+			else
+				this->_size += 1;
+			end = this->end() - 1;
+			modify_ptr = this->_vector_ptr + this->_size - 1;
+			while (end != this->begin() + diff)
+			{
+				*modify_ptr = *(modify_ptr - 1);
+				modify_ptr--;
+				end--;
+			}
+			*modify_ptr = value;
+			return (this->begin() + diff);
+		}
+
+		iterator		insert(iterator pos, size_type count, const_reference value)
+		{
+			difference_type	diff;
+			iterator	end;
+			pointer		modify_ptr;
+
+			diff = pos - this->begin();
+			if (this->_size + count > this->_capacity)
+				this->resize(this->_size + count);
+			else
+				this->_size += count;
+			end = this->end() - 1;
+			modify_ptr = this->_vector_ptr + this->_size - 1;
+			while (end != this->begin() + diff + count - 1)
+			{
+				*modify_ptr = *(modify_ptr - count);
+				modify_ptr--;
+				end--;
+			}
+			while (end != this->begin() + diff - 1)
+			{
+				*modify_ptr = value;
+				modify_ptr--;
+				end--;
+			}
+			return (this->begin() + diff);
+		}
 
 		template < typename InputIt >
-		void			insert(iterator pos, InputIt first, InputIt last);
+		iterator			insert(iterator pos, InputIt first, InputIt last)
+		{
+			difference_type	diff;
+			difference_type	count;
+			iterator	end;
+			pointer		modify_ptr;
 
-		iterator		erase(iterator pos);
-		iterator		erase(iterator first, iterator last);
-		void			swap(vector& other);
-		void			clear(void);
+			diff = pos - this->begin();
+			count = last - first;
+			if (this->_size + count > this->_capacity)
+				this->resize(this->_size + count);
+			else
+				this->_size += count;
+			end = this->end() - 1;
+			modify_ptr = this->_vector_ptr + this->_size - 1;
+			while (end != this->begin() + diff + count - 1)
+			{
+				*modify_ptr = *(modify_ptr - count);
+				modify_ptr--;
+				end--;
+			}
+			while (end != this->begin() + diff - 1)
+			{
+				*modify_ptr = *(last - 1);
+				last--;
+				modify_ptr--;
+				end--;
+			}
+			return (this->begin() + diff);
+		}
+
+		iterator		erase(iterator pos)
+		{
+			difference_type	diff;
+			iterator	end;
+			pointer		modify_ptr;
+
+			diff = pos - this->begin();
+			end = this->end() - 1;
+			modify_ptr = this->_vector_ptr + diff;
+			while (pos != end)
+			{
+				*modify_ptr = *(modify_ptr + 1);
+				modify_ptr++;
+				pos++;
+			}
+			this->_allocator.destroy(modify_ptr);
+			this->_size -= 1;
+			return (this->begin() + diff);
+		}
+
+		iterator		erase(iterator first, iterator last)
+		{
+			difference_type	count;
+			difference_type	diff;
+			iterator	begin;
+			pointer		modify_ptr;
+
+			count = last - first;
+			diff = this->end() - last;
+			modify_ptr = this->_vector_ptr + (first - this->begin());
+			begin = first;
+			while (diff > 0)
+			{
+				*modify_ptr = *(modify_ptr + count);
+				modify_ptr++;
+				begin++;
+				diff--;
+			}
+			while (begin != this->end())
+			{
+				this->_allocator.destroy(modify_ptr);
+				modify_ptr++;
+				begin++;
+			}
+			this->_size -= count;
+			return (first);
+		}
+
+		void			swap(vector& other)
+		{
+			vector	tmp;
+
+			tmp = *this;
+			*this = other;
+			other = tmp;
+			return ;
+		}
+
+		void			clear(void)
+		{
+			this->resize(0);
+			return ;
+		}
 
 		/** Allocator **/
 		allocator_type		get_allocator(void) const

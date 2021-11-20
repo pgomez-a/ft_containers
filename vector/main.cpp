@@ -7,35 +7,60 @@ void	leaks(void)
 	system("leaks container");
 }
 
-int	main(void)
+template < typename Iter >
+void	show_elems(Iter begin, Iter end)
+{
+	while (begin != end)
+	{
+		std::cout << *begin << "  ";
+		begin++;
+	}
+	std::cout << std::endl;
+}
+
+int main ()
 {
 	atexit(leaks);
-
 	{
-		std::cout << "STD::VECTOR" << std::endl;
-		std::size_t		val = 13;
-		std::vector<int>	vct(val, 3);
-		std::size_t		index = 3;
+		std::vector<char> myvector;
+		char * p;
+		unsigned int i;
 
-		std::cout << "Size: " << vct.size() << std::endl;
-		std::cout << "Capa: " << vct.capacity() << std::endl;
-		vct[val - 1] = 4;
-		std::cout << "vct[" << index << "] --> " << vct.back() << std::endl;
-		vct.back() = 10;
-		std::cout << "vct[" << index << "] --> " << vct.back() << std::endl;
-	}
-	{
-		std::cout << "FT::VECTOR" << std::endl;
-		std::size_t		val = 13;
-		ft::vector<int>		ft_vct(val, 3);
-		std::size_t		index = 3;
+		// allocate an array with space for 5 elements using vector's allocator:
+		p = myvector.get_allocator().allocate('a');
+
+		// construct values in-place on the array:
+		for (i=0; i<5; i++) myvector.get_allocator().construct(&p[i],i + 'A');
+
+		std::cout << "The allocated array contains:";
+		for (i=0; i<5; i++) std::cout << ' ' << p[i];
+		std::cout << '\n';
 		
-		std::cout << "Size: " << ft_vct.size() << std::endl;
-		std::cout << "Capa: " << ft_vct.capacity() << std::endl;
-		ft_vct[val - 1] = 4;
-		std::cout << "ft_vct[" << index << "] --> " << ft_vct.back() << std::endl;
-		ft_vct.back() = 10;
-		std::cout << "ft_vct[" << index << "] --> " << ft_vct.back() << std::endl;
+		// destroy and deallocate:
+		for (i=0; i<5; i++) myvector.get_allocator().destroy(&p[i]);
+		myvector.get_allocator().deallocate(p,5);
 	}
-	return (0);
+	std::cout << std::endl;
+	{
+		ft::vector<char> myvector;
+		char * p;
+		unsigned int i;
+
+		// allocate an array with space for 5 elements using vector's allocator:
+		p = myvector.get_allocator().allocate('a');
+
+		// construct values in-place on the array:
+		for (i=0; i<5; i++) myvector.get_allocator().construct(&p[i],i + 'A');
+
+		std::cout << "The allocated array contains:";
+		for (i=0; i<5; i++) std::cout << ' ' << p[i];
+		std::cout << '\n';
+
+		// destroy and deallocate:
+		for (i=0; i<5; i++) myvector.get_allocator().destroy(&p[i]);
+		myvector.get_allocator().deallocate(p,5);
+	}
+	std::cout << std::endl;
+
+	return 0;
 }
