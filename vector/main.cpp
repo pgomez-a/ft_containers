@@ -22,35 +22,37 @@ int main ()
 {
 	atexit(leaks);
 	{
-		std::vector<char> 	myvector;
+		std::vector<char> foo (3,'1');   // three ints with a value of 100
+		std::vector<char> bar (5,'2');   // five ints with a value of 200
 
-		// set some initial content:
-		for (int i=1;i<10;i++) myvector.push_back(i + 'A');
+		foo.swap(bar);
 
-		myvector.reserve(30);
-		show_elems(myvector.begin(), myvector.end());
-		std::cout << "size: " << myvector.size() << std::endl;
-		std::cout << "capa: " << myvector.capacity() << std::endl;
-		myvector.resize(20, '7');
-		show_elems(myvector.begin(), myvector.end());
-		std::cout << "size: " << myvector.size() << std::endl;
-		std::cout << "capa: " << myvector.capacity() << std::endl;
+		std::cout << "foo contains:";
+		for (std::vector<char>::iterator it = foo.begin(); it!=foo.end(); ++it)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
+
+		std::cout << "bar contains:";
+		for (std::vector<char>::iterator it = bar.begin(); it!=bar.end(); ++it)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
 	}
-	std::cout << std::endl;
+	std::cout << std::endl << std::endl;;
 	{
-		ft::vector<char> 	myvector;
+		ft::vector<char> foo (3,'1');   // three ints with a value of 100
+		ft::vector<char> bar (5,'2');   // five ints with a value of 200
 
-		// set some initial content:
-		for (int i=1;i<10;i++) myvector.push_back(i + 'A');
+		foo.swap(bar);
 
-		myvector.reserve(30);
-		show_elems(myvector.begin(), myvector.end());
-		std::cout << "size: " << myvector.size() << std::endl;
-		std::cout << "capa: " << myvector.capacity() << std::endl;
-		myvector.resize(20, '7');
-		show_elems(myvector.begin(), myvector.end());
-		std::cout << "size: " << myvector.size() << std::endl;
-		std::cout << "capa: " << myvector.capacity() << std::endl;
+		std::cout << "foo contains:";
+		for (ft::vector<char>::iterator it = foo.begin(); it!=foo.end(); ++it)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
+
+		std::cout << "bar contains:";
+		for (ft::vector<char>::iterator it = bar.begin(); it!=bar.end(); ++it)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
 	}
 	std::cout << std::endl;
 

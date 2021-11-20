@@ -636,6 +636,79 @@ class	vector
 		}
 };
 
+template < typename T, typename Alloc >
+bool	operator==(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+{
+	typename ft::vector<T>::iterator	beg_lhs;
+	typename ft::vector<T>::iterator	beg_rhs;
+
+	if (lhs.size() == rhs.size())
+	{
+		beg_lhs = lhs.begin();
+		beg_rhs = rhs.begin();
+		while (beg_lhs != lhs.end())
+		{
+			if (*beg_lhs != *beg_rhs)
+				return (false);
+			beg_lhs++;
+			beg_rhs++;
+		}
+		return (true);
+	}
+	return (false);
+}
+
+template < typename T, typename Alloc >
+bool	operator!=(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+{
+	return (!(lhs == rhs));
+}
+
+template < typename T, typename Alloc >
+bool	operator<(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+{
+	typename ft::vector<T>::iterator	beg_lhs;
+	typename ft::vector<T>::iterator	beg_rhs;
+
+	beg_lhs = lhs.begin();
+	beg_rhs = rhs.begin();
+	while (beg_lhs != lhs.end() && beg_rhs != rhs.end())
+	{
+		if (*beg_lhs > *beg_rhs)
+			return (false);
+		if (*beg_lhs < *beg_rhs)
+			return (true);
+		beg_lhs++;
+		beg_rhs++;
+	}
+	return (false);
+}
+
+template < typename T, typename Alloc >
+bool	operator<=(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+{
+	return (!(rhs < lhs));
+}
+
+template < typename T, typename Alloc >
+bool	operator>(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+{
+	return (rhs < lhs);
+}
+
+template < typename T, typename Alloc >
+bool	operator>=(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
+{
+	return (!(lhs < rhs));
+}
+
+template < typename T, typename Alloc >
+void	swap(ft::vector<T, Alloc>& x, ft::vector<T, Alloc>& y)
+{
+	x.swap(y);
+	return ;
+}
+
 }
 
 #endif
