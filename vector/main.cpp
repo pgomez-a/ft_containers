@@ -22,43 +22,35 @@ int main ()
 {
 	atexit(leaks);
 	{
-		std::vector<char> myvector;
-		char * p;
-		unsigned int i;
+		std::vector<char> 	myvector;
 
-		// allocate an array with space for 5 elements using vector's allocator:
-		p = myvector.get_allocator().allocate('a');
+		// set some initial content:
+		for (int i=1;i<10;i++) myvector.push_back(i + 'A');
 
-		// construct values in-place on the array:
-		for (i=0; i<5; i++) myvector.get_allocator().construct(&p[i],i + 'A');
-
-		std::cout << "The allocated array contains:";
-		for (i=0; i<5; i++) std::cout << ' ' << p[i];
-		std::cout << '\n';
-		
-		// destroy and deallocate:
-		for (i=0; i<5; i++) myvector.get_allocator().destroy(&p[i]);
-		myvector.get_allocator().deallocate(p,5);
+		myvector.reserve(30);
+		show_elems(myvector.begin(), myvector.end());
+		std::cout << "size: " << myvector.size() << std::endl;
+		std::cout << "capa: " << myvector.capacity() << std::endl;
+		myvector.resize(20, '7');
+		show_elems(myvector.begin(), myvector.end());
+		std::cout << "size: " << myvector.size() << std::endl;
+		std::cout << "capa: " << myvector.capacity() << std::endl;
 	}
 	std::cout << std::endl;
 	{
-		ft::vector<char> myvector;
-		char * p;
-		unsigned int i;
+		ft::vector<char> 	myvector;
 
-		// allocate an array with space for 5 elements using vector's allocator:
-		p = myvector.get_allocator().allocate('a');
+		// set some initial content:
+		for (int i=1;i<10;i++) myvector.push_back(i + 'A');
 
-		// construct values in-place on the array:
-		for (i=0; i<5; i++) myvector.get_allocator().construct(&p[i],i + 'A');
-
-		std::cout << "The allocated array contains:";
-		for (i=0; i<5; i++) std::cout << ' ' << p[i];
-		std::cout << '\n';
-
-		// destroy and deallocate:
-		for (i=0; i<5; i++) myvector.get_allocator().destroy(&p[i]);
-		myvector.get_allocator().deallocate(p,5);
+		myvector.reserve(30);
+		show_elems(myvector.begin(), myvector.end());
+		std::cout << "size: " << myvector.size() << std::endl;
+		std::cout << "capa: " << myvector.capacity() << std::endl;
+		myvector.resize(20, '7');
+		show_elems(myvector.begin(), myvector.end());
+		std::cout << "size: " << myvector.size() << std::endl;
+		std::cout << "capa: " << myvector.capacity() << std::endl;
 	}
 	std::cout << std::endl;
 

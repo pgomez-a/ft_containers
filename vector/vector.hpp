@@ -203,57 +203,35 @@ class	vector
 		explicit vector(size_type count, const_reference value = value_type(),
 			const allocator_type& alloc = allocator_type())
 		{
-			iterator	begin;
-			iterator	end;
-			pointer		construct_ptr;
-
-			this->_size = count;
-			this->_capacity = count;
+			this->_size = 0;
+			this->_capacity = 0;
 			this->_allocator = alloc;
-			this->_vector_ptr = this->_allocator.allocate(this->_capacity);
-			begin = this->begin();
-			end = this->end();
-			construct_ptr = this->_vector_ptr;
-			while (begin != end)
-			{
-				this->_allocator.construct(construct_ptr, value);
-				construct_ptr++;
-				begin++;
-			}
+			this->_vector_ptr = nullptr;
+			this->assign(count, value);
+			return ;
 		}
 		
 		template < typename InputIt >
 		vector(InputIt first, InputIt last,
 			const allocator_type& alloc = allocator_type())
 		{
-			iterator	begin;
-			iterator	end;
-			pointer		construct_ptr;
-
-			this->_size = last - first;
-			this->_capacity = last - first;
+			this->_size = 0;
+			this->_capacity = 0;
 			this->_allocator = alloc;
-			this->_vector_ptr = this->_allocator.allocate(this->_capacity);
-			begin = this->begin();
-			end = this->end();
-			construct_ptr = this->_vector_ptr;
-			while (begin != end)
-			{
-				this->_allocator.construct(construct_ptr, *first);
-				first++;
-				construct_ptr++;
-				begin++;
-			}
+			this->_vector_ptr = nullptr;
+			this->assign(first, last);
+			return ;
 		}
 
-		vector(const vector& other) //NOTE: Consider with assignation operator
+		vector(const vector& other)
 		{
 			if (this != &other)
 			{
-				this->_size = other._size;
-				this->_capacity = other._capacity;
+				this->_size = 0;
+				this->_capacity = 0;
 				this->_allocator = other._allocator;
-				*this = other;
+				this->_vector_ptr = nullptr;
+				this->assign(other.begin(), other.end());
 			}
 			return ;
 		}
@@ -269,40 +247,10 @@ class	vector
 		/** Assignation Operator **/
 		vector&			operator=(const vector& other)
 		{
-			iterator	begin;
-			iterator	end;
-			iterator	tmp;
-			pointer		modify_ptr;
-
 			if (this != &other)
-			{
-				begin = this->begin();
-				end = this->end();
-				modify_ptr = this->_vector_ptr;
-				while (begin != end)
-				{
-					this->_allocator.destroy(modify_ptr);
-					modify_ptr++;
-					begin++;
-				}
-				this->_allocator.deallocate(this->_vector_ptr, this->_capacity);
-				this->_size = other.size();
-				this->_capacity = other.capacity();
-				this->_vector_ptr = this->_allocator.allocate(this->_capacity);
-				begin = this->begin();
-				end = this->end();
-				tmp = other.begin();
-				modify_ptr = this->_vector_ptr;
-				while (begin != end)
-				{
-					this->_allocator.construct(modify_ptr, *tmp);
-					tmp++;
-					modify_ptr++;
-					begin++;
-				}
-			}
+				this->assign(other.begin(), other.end());
 			return (*this);
-		} // NOTE: What happens for different sizes?
+		}
 
 		/** Iterators **/
 		iterator		begin(void)
@@ -338,8 +286,8 @@ class	vector
 
 		size_type		max_size(void) const
 		{
-			return (this->_allocator.max_size());
-		} // NOTE: Review
+			return (this->_allocator.max_size() / sizeof(value_type));
+		}
 
 		size_type		capacity(void) const
 		{
@@ -348,9 +296,9 @@ class	vector
 
 		void			resize(size_type count, value_type value = value_type())
 		{
-			iterator		begin;
-			iterator		end;
-			pointer			modify_ptr;
+			iterator	begin;
+			iterator	end;
+			pointer		modify_ptr;
 
 			if (count < this->_size)
 			{
@@ -376,6 +324,7 @@ class	vector
 					modify_ptr++;
 					begin++;
 				}
+				this->_size = count;
 			}
 			else
 			{
@@ -383,7 +332,7 @@ class	vector
 					this->reserve(this->_capacity * 2);
 				else
 					this->reserve(count);
-				begin = this->begin() + this->_size;
+				begin = this->begin() + this->_size - 1;
 				end = this->end();
 				modify_ptr = this->_vector_ptr + this->_size;
 				while (begin != end)
@@ -395,7 +344,7 @@ class	vector
 				this->_size = count;
 			}
 			return ;
-		} // NOTE: does not work
+		}
 
 		void			reserve(size_type new_cap)
 		{
@@ -510,7 +459,7 @@ class	vector
 				count--;
 			}
 			return ;
-		} // NOTE: Allocation does not multiply by 2 the capacity
+		}
 
 		void			push_back(const_reference value)
 		{
