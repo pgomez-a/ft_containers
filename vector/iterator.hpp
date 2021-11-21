@@ -66,7 +66,13 @@ class reverse_iterator : public iterator_traits<Iter>
 		~reverse_iterator(void) {}
 
 		/** Base **/
-		iterator_type		base() const; // NOTE: HEYYY!
+		iterator_type		base() const
+		{
+			iterator_type	aux(*this);
+
+			aux++;
+			return (aux);
+		}
 
 		/** Assignation Operator **/
 		template < typename U >

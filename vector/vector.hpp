@@ -1,18 +1,20 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+#include "iterator.hpp"
+
 template < typename T >
-struct	VectorIterator
+struct	VectorIterator : public iterator_traits<T*>
 {
 	public:
 		/** Member Types **/
-		typedef std::random_access_iterator_tag	iterator_category;
-		typedef T				value_type;
-		typedef std::ptrdiff_t			difference_type;
-		typedef T*				pointer;
-		typedef const T*			const_pointer;
-		typedef T&				reference;
-		typedef const T&			const_reference;
+		typedef typename iterator_traits<T*>::iterator_category		iterator_category;
+		typedef typename iterator_traits<T*>::value_type		value_type;
+		typedef typename iterator_traits<T*>::difference_type		difference_type;
+		typedef typename iterator_traits<T*>::pointer			pointer;
+		typedef typename iterator_traits<T*>::const_pointer		const_pointer;
+		typedef typename iterator_traits<T*>::reference			reference;
+		typedef typename iterator_traits<T*>::const_reference		const_reference;
 
 	private:
 		/** Member Attributes **/
@@ -32,55 +34,50 @@ struct	VectorIterator
 			return (*this);
 		}
 
-		difference_type	operator-(const VectorIterator& other) const
-		{
-			return (this->_ptr_it - other._ptr_it);
-		}
-
-		/** Operations **/
+		/** Member Functions **/
 		bool		operator==(const VectorIterator& other) const
 		{
 			if (this->_ptr_it == other._ptr_it)
-				return true;
-			return false;
+				return (true);
+			return (false);
 		}
 
 		bool		operator!=(const VectorIterator& other) const
 		{
 			if (this->_ptr_it != other._ptr_it)
-				return true;
-			return false;
+				return (true);
+			return (false);
 		}
 
 		bool		operator<(const VectorIterator& other) const
 		{
 			if (this->_ptr_it < other._ptr_it)
-				return true;
-			return false;
+				return (true);
+			return (false);
 		}
 
 		bool		operator<=(const VectorIterator& other) const
 		{
 			if (this->_ptr_it <= other._ptr_it)
-				return true;
-			return false;
+				return (true);
+			return (false);
 		}
 
 		bool		operator>(const VectorIterator& other) const
 		{
 			if (this->_ptr_it > other._ptr_it)
-				return true;
-			return false;
+				return (true);
+			return (false);
 		}
 
 		bool		operator>=(const VectorIterator& other) const
 		{
 			if (this->_ptr_it >= other._ptr_it)
-				return true;
-			return false;
+				return (true);
+			return (false);
 		}
 
-		reference	operator*(void) const // NOTE: Review syntax
+		reference	operator*(void) const
 		{
 			return (*this->_ptr_it);
 		}
@@ -90,7 +87,7 @@ struct	VectorIterator
 			return (*this->_ptr_it + n);
 		}
 
-		pointer		operator->(void) const // NOTE: Review syntax
+		pointer		operator->(void) const
 		{
 			return (this->_ptr_it);
 		}
@@ -147,6 +144,11 @@ struct	VectorIterator
 			return (output_it);
 		}
 
+		difference_type	operator-(const VectorIterator& other) const
+		{
+			return (this->_ptr_it - other._ptr_it);
+		}
+
 		VectorIterator	operator+=(difference_type n)
 		{
 			this->_ptr_it += n;
@@ -178,8 +180,8 @@ class	vector
 		typedef typename Allocator::const_pointer	const_pointer;
 		typedef VectorIterator<T>			iterator;
 		typedef const VectorIterator<T>			const_iterator;
-		typedef std::reverse_iterator<iterator>		reverse_iterator;
-		typedef std::reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef reverse_iterator<iterator>		reverse_it;
+		typedef reverse_iterator<const_iterator>	const_reverse_it;
 
 	private:
 		/** Member Attributes **/
@@ -273,10 +275,25 @@ class	vector
 			return (VectorIterator<value_type>(this->_vector_ptr + this->_size));
 		}
 
-		reverse_iterator	rbegin(void);
-		const_reverse_iterator	rbegin(void) const;
-		reverse_iterator	rend(void);
-		const_reverse_iterator	rend(void) const;
+		reverse_it		rbegin(void)
+		{
+			return (reverse_it(this->_vector_ptr + this->_size - 1));
+		}
+
+		const_reverse_it	rbegin(void) const
+		{
+			return (const_reverse_it(this->_vector_ptr + this->_size - 1));
+		}
+
+		reverse_it		rend(void)
+		{
+			return (reverse_it(this->_vector_ptr - 1));
+		}
+
+		const_reverse_it	rend(void) const
+		{
+			return (const_reverse_it(this->_vector_ptr - 1));
+		}
 
 		/** Capacity **/
 		size_type		size(void) const
