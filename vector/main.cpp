@@ -22,27 +22,45 @@ int main ()
 {
 	atexit(leaks);
 	{
-		  std::vector<char> myvector;
-  for (int i=0; i<10; i++) myvector.push_back(i + 'A');
+		std::vector<char> myvector;
+		for (int i=0; i<10; i++) myvector.push_back(i + 'A');
 
-  std::reverse_iterator<std::vector<char>::iterator> from,until;
+		typedef std::vector<char>::iterator iter_type;
 
-  from = myvector.rbegin();
-  until = myvector.rend();
+		iter_type from (myvector.begin());                     //   ^
 
-  std::cout << "myvector has " << (until-from) << " elements.\n";
+		iter_type until (myvector.end());                      //                       ^
+
+
+		std::reverse_iterator<iter_type> rev_until (from);     // ^
+
+		std::reverse_iterator<iter_type> rev_from (until);     //                     ^
+
+		std::cout << "myvector:";
+		while (rev_from != rev_until)
+			std::cout << ' ' << *rev_from++;
+		std::cout << '\n';
 	}
 	std::cout << std::endl;
 	{
-				  ft::vector<char> myvector;
-  for (int i=0; i<10; i++) myvector.push_back(i + 'A');
+		ft::vector<char> myvector;
+		for (int i=0; i<10; i++) myvector.push_back(i + 'A');
 
-  ft::reverse_iterator<ft::vector<char>::iterator> from,until;
+		typedef ft::vector<char>::iterator iter_type;
 
-  from = myvector.rbegin();
-  until = myvector.rend();
+		iter_type from (myvector.begin());                     //   ^
 
-  std::cout << "myvector has " << (until-from) << " elements.\n";
+		iter_type until (myvector.end());                      //                       ^
+
+
+		ft::reverse_iterator<iter_type> rev_until (from);     // ^
+
+		ft::reverse_iterator<iter_type> rev_from (until);     //                     ^
+
+		std::cout << "myvector:";
+		while (rev_from != rev_until)
+			std::cout << ' ' << *rev_from++;
+		std::cout << '\n';
 	}
 	return 0;
 }
