@@ -4,17 +4,17 @@
 #include "iterator.hpp"
 
 template < typename T >
-struct	VectorIterator : public iterator_traits<T*>
+class	VectorIterator : public ft::iterator_traits<T*>
 {
 	public:
 		/** Member Types **/
-		typedef typename iterator_traits<T*>::iterator_category		iterator_category;
-		typedef typename iterator_traits<T*>::value_type		value_type;
-		typedef typename iterator_traits<T*>::difference_type		difference_type;
-		typedef typename iterator_traits<T*>::pointer			pointer;
-		typedef typename iterator_traits<T*>::const_pointer		const_pointer;
-		typedef typename iterator_traits<T*>::reference			reference;
-		typedef typename iterator_traits<T*>::const_reference		const_reference;
+		typedef typename ft::iterator_traits<T*>::iterator_category	iterator_category;
+		typedef typename ft::iterator_traits<T*>::value_type		value_type;
+		typedef typename ft::iterator_traits<T*>::difference_type	difference_type;
+		typedef typename ft::iterator_traits<T*>::pointer		pointer;
+		typedef typename ft::iterator_traits<T*>::const_pointer		const_pointer;
+		typedef typename ft::iterator_traits<T*>::reference		reference;
+		typedef typename ft::iterator_traits<T*>::const_reference	const_reference;
 
 	private:
 		/** Member Attributes **/
@@ -84,12 +84,20 @@ struct	VectorIterator : public iterator_traits<T*>
 
 		reference	operator[](difference_type n)
 		{
-			return (*this->_ptr_it + n);
+			return (*(this->_ptr_it + n));
 		}
 
 		pointer		operator->(void) const
 		{
 			return (this->_ptr_it);
+		}
+
+		VectorIterator	operator+(difference_type n)
+		{
+			VectorIterator	output_it;
+
+			output_it._ptr_it = this->_ptr_it + n;
+			return (output_it);
 		}
 
 		VectorIterator	operator++(void)
@@ -110,6 +118,25 @@ struct	VectorIterator : public iterator_traits<T*>
 			return (output_it);
 		}
 
+		VectorIterator	operator+=(difference_type n)
+		{
+			this->_ptr_it += n;
+			return (*this);
+		}
+
+		VectorIterator	operator-(difference_type n)
+		{
+			VectorIterator	output_it;
+
+			output_it._ptr_it = this->_ptr_it - n;
+			return (output_it);
+		}
+
+		difference_type	operator-(const VectorIterator<T>& other)
+		{
+			return (this->_ptr_it - other._ptr_it);
+		}
+
 		VectorIterator	operator--(void)
 		{
 			VectorIterator	output_it;
@@ -126,33 +153,6 @@ struct	VectorIterator : public iterator_traits<T*>
 			output_it = *this;
 			this->_ptr_it--;
 			return (output_it);
-		}
-
-		VectorIterator	operator+(difference_type n)
-		{
-			VectorIterator	output_it;
-
-			output_it._ptr_it = this->_ptr_it + n;
-			return (output_it);
-		}
-
-		VectorIterator	operator-(difference_type n)
-		{
-			VectorIterator	output_it;
-
-			output_it._ptr_it = this->_ptr_it - n;
-			return (output_it);
-		}
-
-		difference_type	operator-(const VectorIterator& other) const
-		{
-			return (this->_ptr_it - other._ptr_it);
-		}
-
-		VectorIterator	operator+=(difference_type n)
-		{
-			this->_ptr_it += n;
-			return (*this);
 		}
 
 		VectorIterator	operator-=(difference_type n)
@@ -180,8 +180,8 @@ class	vector
 		typedef typename Allocator::const_pointer	const_pointer;
 		typedef VectorIterator<T>			iterator;
 		typedef const VectorIterator<T>			const_iterator;
-		typedef reverse_iterator<iterator>		reverse_it;
-		typedef reverse_iterator<const_iterator>	const_reverse_it;
+		typedef ft::reverse_iterator<iterator>		reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
 	private:
 		/** Member Attributes **/
@@ -275,24 +275,24 @@ class	vector
 			return (VectorIterator<value_type>(this->_vector_ptr + this->_size));
 		}
 
-		reverse_it		rbegin(void)
+		reverse_iterator	rbegin(void)
 		{
-			return (reverse_it(this->_vector_ptr + this->_size - 1));
+			return (reverse_iterator(this->_vector_ptr + this->_size));
 		}
 
-		const_reverse_it	rbegin(void) const
+		const_reverse_iterator	rbegin(void) const
 		{
-			return (const_reverse_it(this->_vector_ptr + this->_size - 1));
+			return (const_reverse_iterator(this->_vector_ptr + this->_size));
 		}
 
-		reverse_it		rend(void)
+		reverse_iterator	rend(void)
 		{
-			return (reverse_it(this->_vector_ptr - 1));
+			return (reverse_iterator(this->_vector_ptr));
 		}
 
-		const_reverse_it	rend(void) const
+		const_reverse_iterator	rend(void) const
 		{
-			return (const_reverse_it(this->_vector_ptr - 1));
+			return (const_reverse_iterator(this->_vector_ptr));
 		}
 
 		/** Capacity **/

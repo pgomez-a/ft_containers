@@ -22,39 +22,27 @@ int main ()
 {
 	atexit(leaks);
 	{
-		std::vector<char> foo (3,'1');   // three ints with a value of 100
-		std::vector<char> bar (5,'2');   // five ints with a value of 200
+		  std::vector<char> myvector;
+  for (int i=0; i<10; i++) myvector.push_back(i + 'A');
 
-		foo.swap(bar);
+  std::reverse_iterator<std::vector<char>::iterator> from,until;
 
-		std::cout << "foo contains:";
-		for (std::vector<char>::iterator it = foo.begin(); it!=foo.end(); ++it)
-			std::cout << ' ' << *it;
-		std::cout << '\n';
+  from = myvector.rbegin();
+  until = myvector.rend();
 
-		std::cout << "bar contains:";
-		for (std::vector<char>::iterator it = bar.begin(); it!=bar.end(); ++it)
-			std::cout << ' ' << *it;
-		std::cout << '\n';
-	}
-	std::cout << std::endl << std::endl;;
-	{
-		ft::vector<char> foo (3,'1');   // three ints with a value of 100
-		ft::vector<char> bar (5,'2');   // five ints with a value of 200
-
-		foo.swap(bar);
-
-		std::cout << "foo contains:";
-		for (ft::vector<char>::iterator it = foo.begin(); it!=foo.end(); ++it)
-			std::cout << ' ' << *it;
-		std::cout << '\n';
-
-		std::cout << "bar contains:";
-		for (ft::vector<char>::iterator it = bar.begin(); it!=bar.end(); ++it)
-			std::cout << ' ' << *it;
-		std::cout << '\n';
+  std::cout << "myvector has " << (until-from) << " elements.\n";
 	}
 	std::cout << std::endl;
+	{
+				  ft::vector<char> myvector;
+  for (int i=0; i<10; i++) myvector.push_back(i + 'A');
 
+  ft::reverse_iterator<ft::vector<char>::iterator> from,until;
+
+  from = myvector.rbegin();
+  until = myvector.rend();
+
+  std::cout << "myvector has " << (until-from) << " elements.\n";
+	}
 	return 0;
 }
