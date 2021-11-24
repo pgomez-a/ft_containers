@@ -118,7 +118,7 @@ class	VectorIterator : public ft::iterator_traits<T*>
 			return (output_it);
 		}
 
-		VectorIterator	operator+=(difference_type n)
+		VectorIterator&	operator+=(difference_type n)
 		{
 			this->_ptr_it += n;
 			return (*this);
@@ -155,7 +155,7 @@ class	VectorIterator : public ft::iterator_traits<T*>
 			return (output_it);
 		}
 
-		VectorIterator	operator-=(difference_type n)
+		VectorIterator&	operator-=(difference_type n)
 		{
 			this->_ptr_it -= n;
 			return (*this);
@@ -202,7 +202,8 @@ class	vector
 			return ;
 		}
 
-		explicit vector(size_type count, const_reference value = value_type(),
+		explicit vector(size_type count,
+			const_reference value = value_type(),
 			const allocator_type& alloc = allocator_type())
 		{
 			this->_size = 0;
@@ -214,7 +215,8 @@ class	vector
 		}
 		
 		template < typename InputIt >
-		vector(InputIt first, InputIt last,
+		vector(typename ft::enable_if<!ft::is_integral<value_type>::value, InputIt>::type first,
+			typename ft::enable_if<!ft::is_integral<value_type>::value, InputIt>::type last,
 			const allocator_type& alloc = allocator_type())
 		{
 			this->_size = 0;
