@@ -215,9 +215,9 @@ class	vector
 		}
 		
 		template < typename InputIt >
-		vector(typename ft::enable_if<!ft::is_integral<value_type>::value, InputIt>::type first,
-			typename ft::enable_if<!ft::is_integral<value_type>::value, InputIt>::type last,
-			const allocator_type& alloc = allocator_type())
+		vector(InputIt first, InputIt last,
+			const allocator_type& alloc = allocator_type(),
+			typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 		{
 			this->_size = 0;
 			this->_capacity = 0;
@@ -441,8 +441,27 @@ class	vector
 		}
 
 		/** Modifiers **/
+		void			assign(size_type count, const_reference value)
+		{
+			pointer		modify_ptr;
+
+			if (count > this->_capacity)
+				this->resize(count);
+			this->_size = count;
+			modify_ptr = this->_vector_ptr;
+			while (count > 0)
+			{
+				this->_allocator.destroy(modify_ptr);
+				this->_allocator.construct(modify_ptr, value);
+				modify_ptr++;
+				count--;
+			}
+			return ;
+		}
+
 		template < typename InputIt >
-		void			assign(InputIt first, InputIt last)
+		void			assign(InputIt first, InputIt last,
+					typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 		{
 			size_type	capacity;
 			pointer		modify_ptr;
@@ -458,24 +477,6 @@ class	vector
 				this->_allocator.construct(modify_ptr, *first);
 				modify_ptr++;
 				first++;
-			}
-			return ;
-		}
-
-		void			assign(size_type count, const_reference value)
-		{
-			pointer		modify_ptr;
-
-			if (count > this->_capacity)
-				this->resize(count);
-			this->_size = count;
-			modify_ptr = this->_vector_ptr;
-			while (count > 0)
-			{
-				this->_allocator.destroy(modify_ptr);
-				this->_allocator.construct(modify_ptr, value);
-				modify_ptr++;
-				count--;
 			}
 			return ;
 		}
@@ -553,7 +554,8 @@ class	vector
 		}
 
 		template < typename InputIt >
-		iterator			insert(iterator pos, InputIt first, InputIt last)
+		iterator		insert(iterator pos, InputIt first, InputIt last,
+					typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 		{
 			difference_type	diff;
 			difference_type	count;

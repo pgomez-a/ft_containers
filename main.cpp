@@ -18,23 +18,10 @@ void	show_elems(Iter begin, Iter end)
 	std::cout << std::endl;
 }
 
-template < typename T >
-typename ft::enable_if<ft::is_integral<T>::value, void>::type	function(void)
-{
-	std::cout << "is_integral" << std::endl;
-	return ;
-}
-
-template < typename T >
-typename ft::enable_if<!ft::is_integral<T>::value, void >::type	function(void)
-{
-	std::cout << "not_integral" << std::endl;
-	return ;
-}
-
 int main ()
 {
-	ft::vector<char>	vct(4, 5);
-	std::cout << std::endl;
+	ft::vector<int>	vct(4, 4);
+	ft::vector<int>	tmp(vct.begin(), vct.end());
+
 	return 0;
 }
