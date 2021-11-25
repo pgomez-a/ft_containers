@@ -1,7 +1,9 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-#include "iterator.hpp"
+# include <iostream>
+# include "./utils/traits.hpp"
+# include "./utils/iterator.hpp"
 
 template < typename T >
 class	VectorIterator : public ft::iterator_traits<T*>
@@ -243,7 +245,8 @@ class	vector
 		/** Destructor **/
 		~vector(void)
 		{
-			this->resize(0);
+			if (this->_size > 0)
+				this->resize(0);
 			this->_allocator.deallocate(this->_vector_ptr, this->_capacity);
 			return ;
 		}
@@ -646,7 +649,8 @@ class	vector
 
 		void			clear(void)
 		{
-			this->resize(0);
+			if (this->_size > 0)
+				this->resize(0);
 			return ;
 		}
 
