@@ -1,22 +1,36 @@
-.PHONY:	all fclean run
-
-CXX		= clang++
-
-CXXFLAGS	= -Wall -Werror -Wextra
-
-RM		= rm -f
+.PHONY:	all clean fclean re run					\
+	vector clean_vector fclean_vector re_vector run_vector
 
 all:
-	@ $(CXX) $(CXXFLAGS) constructor_vector.cpp -o constructor_vector_test
-	@ $(CXX) $(CXXFLAGS) operator=_vector.cpp -o operator=_vector_test
-	@ $(CXX) $(CXXFLAGS) begin_end_vector.cpp -o begin_end_vector_test
-	@ $(CXX) $(CXXFLAGS) rbegin_rend_vector.cpp -o rbegin_rend_vector_test
+	@ clear
+	@ echo "\033[1m\033[33mCOMPILING VECTOR AND CREATING EXECUTABLES\033[39m\033[0m"
+	@ make -C ./vector_tests/
 
-fclean:	
-	@ $(RM) *_vector_test
+clean:
+	@ make clean -C ./vector_tests/
+
+fclean:
+	@ make fclean -C ./vector_tests/
+
+re:		all fclean
 
 run:		all
-	@ ./constructor_vector_test
-	@ ./operator=_vector_test
-	@ ./begin_end_vector_test
-	@ ./rbegin_rend_vector_test
+	@ clear
+	@ make run -C ./vector_tests/
+
+
+vector:
+	@ echo "\033[1m\033[33mCOMPILING VECTOR AND CREATING EXECUTABLES\033[39m\033[0m"
+	@ make -C ./vector_tests/
+
+clean_vector:
+	@ make clean -C ./vector_tests/
+
+fclean_vector:	clean_vector
+	@ make fclean -C ./vector_tests/
+
+re_vector:	fclean_vector vector
+
+run_vector:	vector
+	@ clear
+	@ make run -C ./vector_tests/

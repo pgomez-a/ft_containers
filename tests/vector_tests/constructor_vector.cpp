@@ -1,7 +1,4 @@
-#include <vector>
-#include <iostream>
-
-#include "../containers/vector.hpp"
+#include "vector_tests.hpp"
 
 void	leaks(void)
 {
@@ -10,7 +7,7 @@ void	leaks(void)
 	std::cout << std::endl;
 	std::cout << "\033[1m\033[31mLEAKS\033[39m\033[0m" << std::endl;
 	system("leaks constructor_vector_test");
-	std::cout << "Press any key to continue...";
+	std::cout << "\033[1mPress ENTER to continue...\033[0m";
 	val = getchar();
 }
 
