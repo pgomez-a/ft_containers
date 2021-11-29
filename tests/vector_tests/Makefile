@@ -62,7 +62,7 @@ $(NAME):	$(OBJS)
 	$(CXX) $(CXXFLAGS) get_allocator_vector.o -o get_allocator_vector_test
 	$(CXX) $(CXXFLAGS) relational_vector.o -o relational_vector_test
 	@ touch .time_cond_make
-	@ echo "\033[1m\033[35mExecutables have been created\033[39m\033[0m"
+	@ echo "\033[1m\033[35mExecutables have been created...\033[39m\033[0m"
 
 clean:
 	@ echo "\033[1m\033[31mRemoving object files...\033[39m\033[0m"

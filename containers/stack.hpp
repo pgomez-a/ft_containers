@@ -57,17 +57,17 @@ class	stack
 			return (this->_ctnr.size());
 		}
 
-		reference		top(void)
+		value_type&		top(void)
 		{
 			return (this->_ctnr.back());
 		}
 
-		const_reference		top(void) const
+		const value_type&	top(void) const
 		{
 			return (this->_ctnr.back());
 		}
 
-		void			push(const reference val)
+		void			push(const value_type& val)
 		{
 			this->_ctnr.push_back(val);
 		}
