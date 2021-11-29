@@ -17,6 +17,8 @@ re:		all fclean
 run:		all
 	@ clear
 	@ make run -C ./vector_tests/
+	@ clear
+	@ make -C ./benchmarks/
 
 
 vector:
