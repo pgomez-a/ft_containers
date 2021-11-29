@@ -19,7 +19,6 @@ int	main(void)
 	std::cout << "\033[1m\033[33m   YP    Y88888P `8888Y'    YP    \033[39m\033[0m" << std::endl;
 	std::cout << std::endl;
 	std::cout << "\033[1m· Constructor Stack Test\033[0m" << std::endl;
-	std::cout << "\033[1m· Operator=   Stack Test\033[0m" << std::endl;
 	std::cout << "\033[1m· Empty       Stack Test\033[0m" << std::endl;
 	std::cout << "\033[1m· Size        Stack Test\033[0m" << std::endl;
 	std::cout << "\033[1m· Top         Stack Test\033[0m" << std::endl;

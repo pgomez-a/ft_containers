@@ -65,13 +65,15 @@ $(NAME):	$(OBJS)
 	@ echo "\033[1m\033[35mExecutables have been created...\033[39m\033[0m"
 
 clean:
-	@ echo "\033[1m\033[31mRemoving object files...\033[39m\033[0m"
+	@ echo "\033[1m\033[31mRemoving vector files...\033[39m\033[0m"
 	@ $(RM) $(OBJS)
 	@ $(RM) .time_cond_make
 
 fclean:		clean
-	@ echo "\033[1m\033[31mRemoving executables...\033[39m\033[0m"
+	@ echo "\033[1m\033[31mRemoving vector executables...\033[39m\033[0m"
 	@ $(RM) *_vector_test
+
+re:		fclean all
 
 run:		all
 	@ clear

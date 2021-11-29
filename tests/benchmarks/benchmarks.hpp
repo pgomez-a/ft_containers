@@ -16,9 +16,37 @@ public:
 	std::clock_t stop();
 };
 
+//#	include "../../containers/map.hpp"
+#	include "../../containers/stack.hpp"
 #	include "../../containers/vector.hpp"
 #	include <iostream>
+#	include <map>
+#	include <stack>
 #	include <vector>
+
+// mapType must be a map to int, bool.
+/**
+template <typename MapType>
+std::clock_t insert_growing(size_t times, MapType map)
+{
+	Timer t;
+	t.start();
+
+	for (size_t i = 0; i < times; i++)
+	{
+		map[i] = true; // insert a constantly growing range of integers
+		// which is a worst-case scenario for an unbalanced map.
+		map.find(i);
+	}
+
+	// Copy-construction and destruction
+	{
+		MapType new_map(map);
+	}
+
+	return t.stop();
+}
+**/
 
 // Vector benchmark
 // Vector must be a vector of ints
@@ -46,6 +74,34 @@ std::clock_t v_insert_growing(size_t times, VectorType vector)
 	return t.stop();
 }
 
+template <typename StackType>
+std::clock_t s_insert_growing(size_t times, StackType stack)
+{
+	Timer t;
+	t.start();
+
+	int tmp = 0;
+
+	for (size_t i = 0; i < times; i++)
+	{
+		stack.push(i); // insert a constantly growing range of integers
+	}
+
+	{
+		StackType newStack(stack); //copy and destruction
+	}
+
+	for (size_t i = 0; i < times; i++)
+	{
+		tmp = stack.top();
+		stack.pop();
+	}
+
+	return t.stop();
+}
+
+//void benchmark_map();
 void benchmark_vector();
+void benchmark_stack();
 
 #endif // !BENCHMARKS_HPP

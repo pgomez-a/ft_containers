@@ -20,11 +20,10 @@ class	stack
 		typedef typename Container::reference		reference;
 		typedef typename Container::const_reference	const_reference;
 
-	private:
+	protected:
 		container_type	_ctnr;
 
 	public:
-
 		/** Constuctor **/
 		explicit stack(const container_type& other = container_type()) : _ctnr(other)
 		{
@@ -76,61 +75,37 @@ class	stack
 		{
 			this->_ctnr.pop_back();
 		}
+
+		friend bool	operator==(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
+		{
+			return (lhs._ctnr == rhs._ctnr);
+		}
+
+		friend bool	operator!=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
+		{
+			return (lhs._ctnr != rhs._ctnr);
+		}
+
+		friend bool	operator<(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
+		{
+			return (lhs._ctnr < rhs._ctnr);
+		}
+		
+		friend bool	operator<=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
+		{
+			return (lhs._ctnr <= rhs._ctnr);
+		}
+		
+		friend bool	operator>(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
+		{
+			return (lhs._ctnr > rhs._ctnr);
+		}
+
+		friend bool	operator>=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
+		{
+			return (lhs._ctnr >= rhs._ctnr);
+		}
 };
-
-template < typename T, typename Container >
-bool	operator==(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	typename	ft::stack<T, Container>::container_type	lhs_sub(lhs);
-	typename	ft::stack<T, Container>::container_type	rhs_sub(rhs);
-
-	return (lhs_sub == rhs_sub);
-}
-
-template < typename T, typename Container >
-bool	operator!=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	typename	ft::stack<T, Container>::container_type	lhs_sub(lhs);
-	typename	ft::stack<T, Container>::container_type	rhs_sub(rhs);
-
-	return (lhs_sub != rhs_sub);
-}
-
-template < typename T, typename Container >
-bool	operator<(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	typename	ft::stack<T, Container>::container_type	lhs_sub(lhs);
-	typename	ft::stack<T, Container>::container_type	rhs_sub(rhs);
-
-	return (lhs_sub < rhs_sub);
-}
-
-template < typename T, typename Container >
-bool	operator<=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	typename	ft::stack<T, Container>::container_type	lhs_sub(lhs);
-	typename	ft::stack<T, Container>::container_type	rhs_sub(rhs);
-
-	return (lhs_sub <= rhs_sub);
-}
-
-template < typename T, typename Container >
-bool	operator>(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	typename	ft::stack<T, Container>::container_type	lhs_sub(lhs);
-	typename	ft::stack<T, Container>::container_type	rhs_sub(rhs);
-
-	return (lhs_sub > rhs_sub);
-}
-
-template < typename T, typename Container >
-bool	operator>=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
-{
-	typename	ft::stack<T, Container>::container_type	lhs_sub(lhs);
-	typename	ft::stack<T, Container>::container_type	rhs_sub(rhs);
-
-	return (lhs_sub >= rhs_sub);
-}
 
 }
 
