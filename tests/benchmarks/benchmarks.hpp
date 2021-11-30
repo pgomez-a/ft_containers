@@ -70,7 +70,15 @@ std::clock_t v_insert_growing(size_t times, VectorType vector)
 	}
 
 	vector.erase(vector.begin(), vector.end()); // erase
+	vector.resize(100);
+	vector.clear();
 
+	for (size_t i = 0; i < times; i++)
+	{
+		vector.push_back(i);
+		tmp = vector.at(i);
+	}
+	
 	return t.stop();
 }
 
