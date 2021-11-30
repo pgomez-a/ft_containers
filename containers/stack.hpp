@@ -2,7 +2,7 @@
 # define STACK_HPP
 
 # include <iostream>
-# include "./utils/traits.hpp"
+# include "./utils/utils.hpp"
 # include "./utils/iterator.hpp"
 # include "vector.hpp"
 
