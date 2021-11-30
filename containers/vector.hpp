@@ -308,7 +308,7 @@ class	vector
 
 		size_type		max_size(void) const
 		{
-			return (this->_allocator.max_size() / sizeof(value_type));
+			return (this->_allocator.max_size());
 		}
 
 		size_type		capacity(void) const
