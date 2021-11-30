@@ -18,12 +18,12 @@ Once we've done CPP_Piscine, we're ready to step into the world of OOP. Our next
 
 ### iterators and their use
 
-### iterator_traits
+### ft::iterator_traits
 
-### reserve_iterator
+### ft::reserve_iterator
 
-### enable_if
+### ft::enable_if
 
-### is_integral
+### ft::is_integral
 
-### lexicographic_compare
+### ft::lexicographic_compare
