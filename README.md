@@ -13,4 +13,4 @@ Since most of the things that we implement with this project are part of the STL
 However, what I have done is create some images that show the main characteristics of each container. I hope you find them useful!
 
 ### ft::vector
-<img width="742" alt="ft::vector" src="https://user-images.githubusercontent.com/74931024/144287950-2e1aebf1-60d8-49cd-85f0-e06672655c25.png">
+![ft::vector](https://user-images.githubusercontent.com/74931024/144288273-e09bbe7b-7ea6-4a2a-8e6d-7c6689258fe1.jpeg)
