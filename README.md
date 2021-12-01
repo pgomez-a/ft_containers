@@ -14,3 +14,6 @@ However, what I have done is create some images that show the main characteristi
 
 ### ft::vector
 ![ft::vector](https://user-images.githubusercontent.com/74931024/144288273-e09bbe7b-7ea6-4a2a-8e6d-7c6689258fe1.jpeg)
+
+### ft::stack
+![ft::stack](https://user-images.githubusercontent.com/74931024/144308330-d583c72e-d300-4655-9a61-85200ebca76a.jpeg)
