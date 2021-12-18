@@ -193,7 +193,6 @@ class	vector
 		pointer		_vector_ptr;
 	
 	public:
-
 		/** Constructors **/
 		explicit vector(const allocator_type& alloc = allocator_type())
 		{
