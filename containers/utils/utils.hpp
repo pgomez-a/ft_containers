@@ -118,6 +118,10 @@ struct is_integral<unsigned long long int>
 	static const bool	value = true;
 };
 
+/**
+ ** ft::lexicographical_compare
+ **/
+
 template < typename ItOne, typename ItTwo >
 bool	lexicographical_compare(ItOne firstOne, ItOne lastOne, ItTwo firstTwo, ItTwo lastTwo)
 {
@@ -147,6 +151,103 @@ bool	lexicographical_compare(ItOne firstOne, ItOne lastOne, ItTwo firstTwo, ItTw
 		return (false);
 	return (true);
 }
+
+/**
+ ** ft::BstNode
+ **/
+
+template < typename T >
+class BstNode
+{
+	public:
+		/** Member Types **/
+		typedef T		value_type;
+		typedef T&		reference;
+		typedef const T&	const_reference;
+		typedef T*		pointer;
+		typedef const T*	const_pointer;
+
+		/** Member Attributes **/
+		value_type	value;
+		BstNode*	parent;
+		BstNode*	left;
+		BstNode*	right;
+
+		/** Constructors **/
+		explicit BstNode(const value_type& value = value_type())
+		{
+			this->value = value;
+			this->parent = nullptr;
+			this->left = nullptr;
+			this->right = nullptr;
+		}
+
+		BstNode(const value_type& value, const BstNode* parent,
+			const BstNode* left, const BstNode* right)
+		{
+			this->value = value;
+			this->parent = parent;
+			this->left = left;
+			this->right = right;
+			return ;
+		}
+
+		BstNode(const BstNode& other)
+		{
+			this->value = other.value;
+			this->parent = other.parent;
+			this->left = other.left;
+			this->right = other.right;
+			return ;
+		}
+
+		/** Destructor **/
+		~BstNode(void)
+		{
+			this->parent = nullptr;
+			this->left = nullptr;
+			this->right = nullptr;
+			return ;
+		}
+
+		/** Assignation Operator **/
+		BstNode&	operator=(const BstNode& other)
+		{
+			if (this != &other)
+			{
+				this->value = other.value;
+				this->parent = other.parent;
+				this->left = other.left;
+				this->right = other.right;
+			}
+			return (*this);
+		}
+
+		/** Overloads **/
+		bool		operator==(const BstNode& other)
+		{
+			if (this->value == other.value)
+				return (true);
+			return (false);
+		}
+
+		bool		operator!=(const BstNode& other)
+		{
+			if (this->value != other.value)
+				return (true);
+			return (false);
+		}
+
+		reference	operator*(void)
+		{
+			return (this->value);
+		}
+
+		pointer		operator->(void)
+		{
+			return (&(this->value));
+		}
+};
 
 }
 
