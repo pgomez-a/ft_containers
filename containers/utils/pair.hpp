@@ -17,7 +17,7 @@ struct pair
 		second_type	second;
 
 		/** Constructors **/
-		pair(void) {}
+		pair(void) : first(), second() {}
 		pair(const first_type& a, const second_type& b) : first(a), second(b) {}
 
 		template < typename U, typename V >

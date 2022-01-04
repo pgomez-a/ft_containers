@@ -3,6 +3,7 @@
 
 # include <iostream>
 # include "./utils/utils.hpp"
+# include "./utils/pair.hpp"
 # include "./utils/iterator.hpp"
 # include "./utils/MapIterator.hpp"
 
@@ -10,7 +11,7 @@ namespace ft
 {
 
 template < typename Key, typename T, typename Compare = std::less<Key>,
-	 typename Alloc = std::allocator<ft::pair<const Key, T> >
+	 typename Alloc = std::allocator<ft::pair<const Key, T> > >
 class map
 {
 	public:
@@ -21,11 +22,11 @@ class map
 		typedef std::size_t						size_type;
 		typedef std::ptrdiff_t						difference_type;
 		typedef Compare							key_compare;
-		typedef Allocator						allocator_type;
+		typedef Alloc							allocator_type;
 		typedef value_type&						reference;
 		typedef const value_type&					const_reference;
-		typedef Allocator::pointer					pointer;
-		typedef Allocator::const_pointer				const_pointer;
+		typedef typename Alloc::pointer					pointer;
+		typedef typename Alloc::const_pointer				const_pointer;
 		typedef MapIterator<ft::BstNode<value_type>, Compare>		iterator;
 		typedef const MapIterator<ft::BstNode<value_type>, Compare>	const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
@@ -49,7 +50,7 @@ class map
 
 			public:
 				/** Member Function **/
-				bool	operator()(const value_type& lhs, const value_tpye& rhs) const
+				bool	operator()(const value_type& lhs, const value_type& rhs) const
 				{
 					return (comp(lhs.first, rhs.first));
 				}
@@ -80,8 +81,8 @@ class map
 		map(const map& other);
 
 		template < class InputIt >
-			map(InputIt first, InputIt last,
-			const key_compare& comp = key_compare();
+		map(InputIt first, InputIt last,
+			const key_compare& comp = key_compare(),
 			const allocator_type& alloc = allocator_type());
 
 		/** Destructor **/
@@ -93,22 +94,22 @@ class map
 		/** Iterators **/
 		iterator		begin(void)
 		{
-			return (BstIterator<value_type>(&this->_beg, &this->_beg, &this->_end));
+			return (MapIterator<value_type>(this->_beg.value, &this->_beg, &this->_beg, &this->_end));
 		}
 
 		const_iterator		begin(void) const
 		{
-			return (BstIterator<value_type>(&this->_beg, &this->_beg, &this->_end));
+			return (MapIterator<value_type>(this->_beg.value, &this->_beg, &this->_beg, &this->_end));
 		}
 
 		iterator		end(void)
 		{
-			return (BstIterator<value_type>(&this->_end, &this->_beg, &this->_end));
+			return (MapIterator<value_type>(this->_beg.value, &this->_end, &this->_beg, &this->_end));
 		}
 
 		const_iterator		end(void) const
 		{
-			return (BstIterator<value_type>(&this->_end, &this->_beg, &this->_end));
+			return (MapIterator<value_type>(this->_beg.value, &this->_end, &this->_beg, &this->_end));
 		}
 
 		reverse_iterator	rbegin(void)
@@ -134,7 +135,7 @@ class map
 		/** Capacity **/
 		bool		empty(void) const
 		{
-			return (this->_size == 0)
+			return (this->_size == 0);
 		}
 
 		size_type	size(void) const
@@ -157,6 +158,25 @@ class map
 		{
 			return (value_compare(this->_comp));
 		}
+
+		/** Operations **/
+		iterator	find(const key_type& k)
+		{
+			ft::BstNode<value_type>	output(this->_node);
+
+			while (output != nullptr)
+			{
+				if(this->_comp(k, output.value))
+					output = output->left;
+				else if (this->_comp(output.value, k))
+					output = output->right;
+				else
+					return (iterator(output.value, output, this->_beg, this->_end));
+			}
+			return (this->end());
+		}
+
+		const_iterator	find(const key_type& k) const;
 
 		/** Allocator **/
 		allocator_type	get_allocator(void) const
