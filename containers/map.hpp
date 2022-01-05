@@ -5,6 +5,7 @@
 # include "./utils/utils.hpp"
 # include "./utils/pair.hpp"
 # include "./utils/iterator.hpp"
+# include "./utils/Bst.hpp"
 # include "./utils/MapIterator.hpp"
 
 namespace ft
@@ -58,23 +59,19 @@ class map
 
 	private:
 		/** Member Attributes **/
-		size_type			_size;
-		key_compare			_comp;
-		allocator_type			_allocator;
-		ft::BstNode<value_type>		_node;
-		ft::BstNode<value_type>		_beg;
-		ft::BstNode<value_type>		_end;
+		Bst<mapped_type, value_type, key_compare, allocator_type >	_Tree;
+		Bst<mapped_type, value_type, key_compare, allocator_type >*	_root;
+		key_compare							_comp;
+		allocator_type							_alloc;
 
 	public:
 		/** Constructors **/
 		explicit map(const key_compare& comp = key_compare(),
 			const allocator_type& alloc = allocator_type())
 		{
-			this->_size = 0;
+			this->_root = NULL;
 			this->_comp = comp;
-			this->_allocator = alloc;
-			this->_beg = this->_node;
-			this->_end = this->_node;
+			this->_alloc = alloc;
 			return ;
 		}
 

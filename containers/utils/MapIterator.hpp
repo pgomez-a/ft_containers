@@ -4,11 +4,12 @@
 # include <iostream>
 # include "iterator.hpp"
 # include "utils.hpp"
+# include "Bst.hpp"
 
 namespace ft
 {
 
-template < typename T, typename Compare = std::less<T> >
+template < typename T >
 class MapIterator : public ft::iterator_traits<T*>
 {
 	public:
@@ -32,58 +33,53 @@ class MapIterator : public ft::iterator_traits<T*>
 		nodePtr	_node;
 		nodePtr	_beg;
 		nodePtr	_end;
-		Compare	_compare;
 
 	public:
 		/** Constructors **/
-		MapIterator(const Compare& comp = Compare())
+		MapIterator(void) : _node(nullptr), _beg(nullptr), _end(nullptr) {}
+
+		MapIterator(nodePtr node) : _node(node)
 		{
-			this->_node = nullptr;
-			this->_beg = nullptr;
-			this->_end = nullptr;
-			this->_compare = comp;
+			nodePtr	tmp(node);
+
+			while (tmp->left != nullptr)
+				tmp = tmp->left;
+			this->_beg = tmp;
+			tmp = node;
+			while (tmp->right != nullptr)
+				tmp = tmp->right;
+			this->_end = tmp;
 			return ;
 		}
 
-		MapIterator(nodePtr root, nodePtr beg,
-			nodePtr end, const Compare& comp = Compare())
-		{
-			this->_node = root;
-			this->_beg= beg;
-			this->_end = end;
-			this->_compare = comp;
-			return ;
-		}
-
-		MapIterator(const MapIterator& other)
-		{
-			this->_node = other._node;
-			this->_beg = other._beg;
-			this->_end = other._end;
-			this->_compare = other._compare;
-			return ;
-		}
+		MapIterator(nodePtr node, nodePtr beg, nodePtr end) : _node(node), _beg(beg), _end(end) {}
+		MapIterator(const MapIterator& other) : _node(other._node), _beg(other._beg), _end(other._end) {}
 
 		/** Destructor **/
-		~MapIterator(void)
-		{
-			this->_node = nullptr;
-			this->_end = nullptr;
-			this->_beg = nullptr;
-			return ;
-		}
+		~MapIterator(void) {}
 
 		/** Assignation Operator **/
 		MapIterator&	operator=(const MapIterator& other)
 		{
 			if (this != &other)
-			{
 				this->_node = other._node;
-				this->_beg = other._beg;
-				this->_end = other._end;
-				this->_compare = other._compare;
-			}
 			return (*this);
+		}
+
+		/** Member Functions **/
+		nodePtr	root(void) const
+		{
+			return (this->_node);
+		}
+
+		nodePtr	begin(void) const
+		{
+			return (this->_beg);
+		}
+
+		nodePtr	end(void) const
+		{
+			return (this->_end);
 		}
 
 		/** Overloads **/
@@ -101,14 +97,14 @@ class MapIterator : public ft::iterator_traits<T*>
 			return (false);
 		}
 
-		reference	operator*(void) const
+		value_type&	operator*(void) const
 		{
-			return (this->_node->value);
+			return (this->_node->data);
 		}
 
-		pointer		operator->(void) const
+		nodePtr		operator->(void) const
 		{
-			return (&(this->_node->value));
+			return (this->_node);
 		}
 
 		MapIterator&	operator++(void)
@@ -169,6 +165,13 @@ class MapIterator : public ft::iterator_traits<T*>
 			return (output);
 		}
 };
+
+template < typename T >
+std::ostream&	operator<<(std::ostream& out, const MapIterator<T>& other)
+{
+	out << (*other).first << ", " << (*other).second;
+	return (out);
+}
 
 }
 

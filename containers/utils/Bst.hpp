@@ -2,10 +2,10 @@
 # define BST_HPP
 
 # include <iostream>
-# include "./utils/utils.hpp"
-# include "./utils/pair.hpp"
-# include "./utils/iterator.hpp"
-# include "./utils/MapIterator.hpp"
+# include "utils.hpp"
+# include "pair.hpp"
+# include "iterator.hpp"
+# include "MapIterator.hpp"
 
 template < typename Key, typename T, typename Compare = std::less<Key>,
 	typename Alloc = std::allocator<ft::pair<Key, T> > >
@@ -28,9 +28,13 @@ class	Bst
 		Bst*		left;
 		Bst*		right;
 		Bst*		parent;
-		key_compare	comp;
-		allocator_type	alloc;
 
+	private:
+		/** Private Member Attributes **/
+		key_compare	_comp;
+		allocator_type	_alloc;
+
+	public:
 		/** Constructor **/
 		explicit Bst(value_type d = value_type(),
 			const key_compare& comp = key_compare(),
@@ -39,8 +43,8 @@ class	Bst
 			this->left = NULL;
 			this->right = NULL;
 			this->parent = NULL;
-			this->comp = comp;
-			this->alloc = alloc;
+			this->_comp = comp;
+			this->_alloc = alloc;
 			return ;
 		}
 
@@ -52,7 +56,7 @@ class	Bst
 		{
 			if (root == NULL || root->data.first == data.first)
 				return (root);
-			if (comp(root->data.first, data.first))
+			if (this->_comp(root->data.first, data.first))
 				return (search(root->right, data));
 			return (search(root->left, data));
 		}
@@ -63,7 +67,7 @@ class	Bst
 
 			if (root == NULL)
 				return (new Bst(data));
-			if (comp(data.first, root->data.first))
+			if (this->_comp(data.first, root->data.first))
 			{
 				tmp = insert(root->left, data);
 				root->left = tmp;
@@ -84,7 +88,7 @@ class	Bst
 
 			if (root == NULL)
 				return (root);
-			if (comp(root->data.first, data.first))
+			if (this->_comp(root->data.first, data.first))
 			{
 				root->right = deleteNode(root->right, data);
 				return (root);
