@@ -4,8 +4,6 @@
 # include <iostream>
 # include "utils.hpp"
 # include "pair.hpp"
-# include "iterator.hpp"
-# include "MapIterator.hpp"
 
 template < typename Key, typename T, typename Compare = std::less<Key>,
 	typename Alloc = std::allocator<ft::pair<Key, T> > >
@@ -17,6 +15,7 @@ class	Bst
 		typedef T					mapped_type;
 		typedef ft::pair<Key, T>			value_type;
 		typedef Compare					key_compare;
+		typedef std::ptrdiff_t				difference_type;
 		typedef Alloc					allocator_type;
 		typedef value_type&				reference;
 		typedef const value_type&			const_reference;
@@ -40,9 +39,9 @@ class	Bst
 			const key_compare& comp = key_compare(),
 			const allocator_type& alloc = allocator_type()) : data(d)
 		{
-			this->left = NULL;
-			this->right = NULL;
-			this->parent = NULL;
+			this->left = nullptr;
+			this->right = nullptr;
+			this->parent = nullptr;
 			this->_comp = comp;
 			this->_alloc = alloc;
 			return ;
@@ -54,18 +53,18 @@ class	Bst
 		/** Member Functions **/
 		Bst*	search(Bst* root, value_type data)
 		{
-			if (root == NULL || root->data.first == data.first)
+			if (root == nullptr || root->data.first == data.first)
 				return (root);
 			if (this->_comp(root->data.first, data.first))
 				return (search(root->right, data));
 			return (search(root->left, data));
 		}
 
-		Bst*	insert(Bst* root, value_type data)
+		Bst*	insert(Bst* root, value_type data) // NOTE: use allocator instead of new
 		{
 			Bst*	tmp;
 
-			if (root == NULL)
+			if (root == nullptr)
 				return (new Bst(data));
 			if (this->_comp(data.first, root->data.first))
 			{
@@ -86,7 +85,7 @@ class	Bst
 		{
 			Bst*	tmp;
 
-			if (root == NULL)
+			if (root == nullptr)
 				return (root);
 			if (this->_comp(root->data.first, data.first))
 			{
@@ -98,13 +97,13 @@ class	Bst
 				root->left = deleteNode(root->left, data);
 				return (root);
 			}
-			if (root->left == NULL)
+			if (root->left == nullptr)
 			{
 				tmp = root->right;
 				delete root;
 				return (tmp);
 			}
-			else if (root->right == NULL)
+			else if (root->right == nullptr)
 			{
 				tmp = root->left;
 				delete root;
@@ -117,7 +116,7 @@ class	Bst
 
 				parent = root;
 				succ = root->right;
-				while (succ->left != NULL)
+				while (succ->left != nullptr)
 				{
 					parent = succ;
 					succ = succ->left;
@@ -126,7 +125,8 @@ class	Bst
 					parent->left = succ->right;
 				else
 					parent->right = succ->right;
-				root->data = succ->data;
+				root->data.first = succ->data.first;
+				root->data.second = succ->data.second;
 				delete succ;
 				return (root);
 			}
@@ -134,7 +134,7 @@ class	Bst
 
 		void	inorder(Bst* root)
 		{
-			if (root == NULL)
+			if (root == nullptr)
 				return ;
 			inorder(root->left);
 			std::cout << root->data.first << " ";
@@ -144,7 +144,7 @@ class	Bst
 
 		void	preorder(Bst* root)
 		{
-			if (root == NULL)
+			if (root == nullptr)
 				return ;
 			std::cout << root->data.first << " ";
 			preorder(root->left);
@@ -154,7 +154,7 @@ class	Bst
 
 		void	postorder(Bst* root)
 		{
-			if (root == NULL)
+			if (root == nullptr)
 				return ;
 			postorder(root->left);
 			postorder(root->right);
@@ -162,13 +162,18 @@ class	Bst
 			return ;
 		}
 
-		void	clean(Bst* root)
+		void	clean(Bst** root)
 		{
-			if (root == NULL)
+			if (*root == nullptr)
 				return ;
-			clean(root->left);
-			clean(root->right);
-			delete root;
+			if ((*root)->left != nullptr)
+				clean(&((*root)->left));
+			if ((*root)->right != nullptr)
+				clean(&((*root)->right));
+			(*root)->left = nullptr;
+			(*root)->right = nullptr;
+			delete *root;
+			*root = nullptr;
 			return ;
 		}
 };

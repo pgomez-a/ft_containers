@@ -9,50 +9,59 @@
 namespace ft
 {
 
-template < typename T >
-class MapIterator : public ft::iterator_traits<T*>
+template < typename Key, typename T, typename Compare = std::less<Key>,
+	 typename Alloc = std::allocator<ft::pair<Key, T> > >
+class MapIterator
 {
 	public:
 		/** Member Types **/
-		typedef std::bidirectional_iterator_tag				iterator_category;
-		typedef typename ft::iterator_traits<T*>::value_type		node;
-		typedef typename ft::iterator_traits<T*>::difference_type	difference_type;
-		typedef typename ft::iterator_traits<T*>::pointer		nodePtr;
-		typedef typename ft::iterator_traits<T*>::const_pointer		nodeConstPtr;
-		typedef typename ft::iterator_traits<T*>::reference		nodeRef;
-		typedef typename ft::iterator_traits<T*>::const_reference	nodeConstRef;
-
-		typedef typename node::value_type				value_type;
-		typedef typename node::reference				reference;
-		typedef typename node::const_reference				const_reference;
-		typedef typename node::pointer					pointer;
-		typedef typename node::const_pointer				const_pointer;
+		typedef std::bidirectional_iterator_tag		iterator_category;
+		typedef ft::pair<Key, T>			value_type;
+		typedef Compare					key_compare;
+		typedef std::ptrdiff_t				difference_type;
+		typedef Alloc					allocator_type;
+		typedef Bst<Key, T, Compare, Alloc>*		pointer;
+		typedef const Bst<Key, T, Compare, Alloc>*	const_pointer;
+		typedef ft::pair<Key, T>&			reference;
+		typedef const ft::pair<Key, T>&			const_reference;
 
 	private:
-		/** Member Attributes **/
-		nodePtr	_node;
-		nodePtr	_beg;
-		nodePtr	_end;
+		/** Private Member Attributes **/
+		pointer	_node;
+		pointer	_beg;
+		pointer	_end;
 
 	public:
 		/** Constructors **/
 		MapIterator(void) : _node(nullptr), _beg(nullptr), _end(nullptr) {}
 
-		MapIterator(nodePtr node) : _node(node)
+		MapIterator(pointer node) : _node(node)
 		{
-			nodePtr	tmp(node);
+			pointer	tmp(node);
 
-			while (tmp->left != nullptr)
-				tmp = tmp->left;
-			this->_beg = tmp;
-			tmp = node;
-			while (tmp->right != nullptr)
-				tmp = tmp->right;
-			this->_end = tmp;
+			if (tmp != nullptr)
+			{
+				while (tmp->parent != nullptr)
+					tmp = tmp->parent;
+				while (tmp->left != nullptr)
+					tmp = tmp->left;
+				this->_beg = tmp;
+				tmp = node;
+				while (tmp->parent != nullptr)
+					tmp = tmp->parent;
+				while (tmp->right != nullptr)
+					tmp = tmp->right;
+				this->_end = tmp->right;
+			}
+			else
+			{
+				this->_beg = nullptr;
+				this->_end = nullptr;
+			}
 			return ;
 		}
 
-		MapIterator(nodePtr node, nodePtr beg, nodePtr end) : _node(node), _beg(beg), _end(end) {}
+		MapIterator(pointer node, pointer beg, pointer end) : _node(node), _beg(beg), _end(end) {}
 		MapIterator(const MapIterator& other) : _node(other._node), _beg(other._beg), _end(other._end) {}
 
 		/** Destructor **/
@@ -67,17 +76,17 @@ class MapIterator : public ft::iterator_traits<T*>
 		}
 
 		/** Member Functions **/
-		nodePtr	root(void) const
+		pointer	root(void) const
 		{
 			return (this->_node);
 		}
 
-		nodePtr	begin(void) const
+		pointer	begin(void) const
 		{
 			return (this->_beg);
 		}
 
-		nodePtr	end(void) const
+		pointer	end(void) const
 		{
 			return (this->_end);
 		}
@@ -97,19 +106,19 @@ class MapIterator : public ft::iterator_traits<T*>
 			return (false);
 		}
 
-		value_type&	operator*(void) const
+		reference	operator*(void) const
 		{
 			return (this->_node->data);
 		}
 
-		nodePtr		operator->(void) const
+		value_type*	operator->(void) const
 		{
-			return (this->_node);
+			return (&(this->_node->data));
 		}
 
 		MapIterator&	operator++(void)
 		{
-			nodePtr	output;
+			pointer	output;
 
 			output = this->_node;
 			if (output->right != nullptr)
@@ -138,7 +147,7 @@ class MapIterator : public ft::iterator_traits<T*>
 
 		MapIterator&	operator--(void)
 		{
-			nodePtr	output;
+			pointer	output;
 
 			output = this->_node;
 			if (output->left != nullptr)
@@ -166,8 +175,8 @@ class MapIterator : public ft::iterator_traits<T*>
 		}
 };
 
-template < typename T >
-std::ostream&	operator<<(std::ostream& out, const MapIterator<T>& other)
+template < typename Key, typename T>
+std::ostream&	operator<<(std::ostream& out, const MapIterator<Key, T>& other)
 {
 	out << (*other).first << ", " << (*other).second;
 	return (out);
