@@ -100,12 +100,16 @@ class	Bst
 			if (root->left == nullptr)
 			{
 				tmp = root->right;
+				if (tmp != nullptr)
+					tmp->parent = root->parent;
 				delete root;
 				return (tmp);
 			}
 			else if (root->right == nullptr)
 			{
 				tmp = root->left;
+				if (tmp != nullptr)
+					tmp->parent = root->parent;
 				delete root;
 				return (tmp);
 			}
@@ -127,6 +131,7 @@ class	Bst
 					parent->right = succ->right;
 				root->data.first = succ->data.first;
 				root->data.second = succ->data.second;
+				root->parent = succ->parent;
 				delete succ;
 				return (root);
 			}
