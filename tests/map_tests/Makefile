@@ -20,8 +20,8 @@ SRCS		= init_map.cpp		\
 		  count_map.cpp		\
 		  lower_bound_map.cpp	\
 		  upper_bound_map.cpp	\
-		  equal_range_map.cpp	
-		  #get_allocator_map.cpp
+		  equal_range_map.cpp	\
+		  get_allocator_map.cpp
 
 OBJS		= $(SRCS:.cpp=.o)
 
@@ -54,7 +54,7 @@ $(NAME):	$(OBJS)
 	$(CXX) $(CXXFLAGS) lower_bound_map.o -o lower_bound_map_test
 	$(CXX) $(CXXFLAGS) upper_bound_map.o -o upper_bound_map_test
 	$(CXX) $(CXXFLAGS) equal_range_map.o -o equal_range_map_test
-	#$(CXX) $(CXXFLAGS) get_allocator_map.o -o get_allocator_map_test
+	$(CXX) $(CXXFLAGS) get_allocator_map.o -o get_allocator_map_test
 	@ touch .time_cond_make
 	@ echo "\033[1m\033[35mExecutables have been compiled...\033[39m\033[0m"
 
@@ -90,4 +90,4 @@ run:		all
 	@ ./lower_bound_map_test
 	@ ./upper_bound_map_test
 	@ ./equal_range_map_test
-	#@ ./get_allocator_map_test
+	@ ./get_allocator_map_test

@@ -13,26 +13,26 @@ namespace ft
 {
 
 template < typename Key, typename T, typename Compare = std::less<Key>,
-	 typename Alloc = std::allocator<ft::pair<Key, T> > >
+	 typename Alloc = std::allocator<ft::pair<const Key, T> > >
 class map
 {
 	public:
 		/** Member Types **/
-		typedef Key									key_type;
-		typedef T									mapped_type;
-		typedef ft::pair<const Key, T>							value_type;
-		typedef std::size_t								size_type;
-		typedef std::ptrdiff_t								difference_type;
-		typedef Compare									key_compare;
-		typedef Alloc									allocator_type;
-		typedef value_type&								reference;
-		typedef const value_type&							const_reference;
-		typedef typename Alloc::pointer							pointer;
-		typedef typename Alloc::const_pointer						const_pointer;
-		typedef MapIterator<key_type, mapped_type, key_compare, allocator_type>		iterator;
-		typedef const MapIterator<key_type, mapped_type, key_compare, allocator_type>	const_iterator;
-		typedef ft::reverse_iterator<iterator>						reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
+		typedef Key						key_type;
+		typedef T						mapped_type;
+		typedef ft::pair<const Key, T>				value_type;
+		typedef std::size_t					size_type;
+		typedef std::ptrdiff_t					difference_type;
+		typedef Compare						key_compare;
+		typedef Alloc						allocator_type;
+		typedef typename Alloc::reference			reference;
+		typedef typename Alloc::const_reference			const_reference;
+		typedef typename Alloc::pointer				pointer;
+		typedef typename Alloc::const_pointer			const_pointer;
+		typedef MapIterator<Key, T, Compare, Alloc>		iterator;
+		typedef const MapIterator<Key, T, Compare, Alloc>	const_iterator;
+		typedef ft::reverse_iterator<iterator>			reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
 
 		/** Member Class **/
 		class value_compare
@@ -102,7 +102,7 @@ class map
 
 		map(const map& other)
 		{
-			ft::MapIterator<key_type, mapped_type>	first(other.begin());
+			iterator	first(other.begin());
 
 			this->_root = nullptr;
 			this->_end = nullptr;
@@ -131,7 +131,7 @@ class map
 		/** Assignation Operator **/
 		map&	operator=(const map& other)
 		{
-			ft::MapIterator<key_type, mapped_type>	first(other.begin());
+			iterator	first(other.begin());
 
 			if (this != &other)
 			{
@@ -163,9 +163,9 @@ class map
 
 		const_iterator		begin(void) const
 		{
-			iterator	it(this->_root);
+			const_iterator	it(this->_root);
 
-			return (iterator(it.begin()));
+			return (const_iterator(it.begin()));
 		}
 
 		iterator		end(void)
