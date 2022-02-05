@@ -33,13 +33,11 @@ class MapIterator
 
 	public:
 		/** Constructors **/
-		MapIterator(void) : _node(nullptr), _beg(nullptr), _end(nullptr) {}
-
-		MapIterator(pointer node) : _node(node)
+		MapIterator(pointer node = nullptr) : _node(node)
 		{
 			pointer	tmp(node);
 
-			if (tmp != nullptr)
+			if (node != nullptr && (tmp != nullptr || tmp == this->_end))
 			{
 				while (tmp->parent != nullptr)
 					tmp = tmp->parent;
@@ -61,8 +59,11 @@ class MapIterator
 			return ;
 		}
 
-		MapIterator(pointer node, pointer beg, pointer end) : _node(node), _beg(beg), _end(end) {}
-		MapIterator(const MapIterator& other) : _node(other._node), _beg(other._beg), _end(other._end) {}
+		MapIterator(pointer node, pointer beg, pointer end)
+			: _node(node), _beg(beg), _end(end) {}
+
+		MapIterator(const MapIterator& other)
+			: _node(other._node), _beg(other._beg), _end(other._end) {}
 
 		/** Destructor **/
 		~MapIterator(void) {}
@@ -71,7 +72,11 @@ class MapIterator
 		MapIterator&	operator=(const MapIterator& other)
 		{
 			if (this != &other)
+			{
 				this->_node = other._node;
+				this->_beg = other._beg;
+				this->_end = other._end;
+			}
 			return (*this);
 		}
 

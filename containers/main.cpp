@@ -1,5 +1,7 @@
 #include "./utils/Bst.hpp"
 #include "./utils/MapIterator.hpp"
+#include "map.hpp"
+#include <map>
 
 void	leaks(void)
 {
@@ -9,46 +11,20 @@ void	leaks(void)
 
 int	main(void)
 {
-	//atexit(leaks);
-	{
-		ft::pair<char, char>		init(0, 0);
-		Bst<char, char >		Tree;
-		Bst<char, char >*		root = NULL;
-		int				t;
+	atexit(leaks);
 
-		std::cout << "Number of nodes: ";
-		std::cin >> t;
-		while (t--)
-		{
-			char			tmp;
-			std::cin >> tmp;
+	int psize;
+	std::map<char,int> mymap;
+	std::pair<char,int>* p;
 
-			ft::pair<char, char>	data(tmp, tmp);
-			root = Tree.insert(root, data);
-		}
-		Tree.inorder(root);
-		std::cout << std::endl;
+	// allocate an array of 5 elements using mymap's allocator:
+	p=mymap.get_allocator().allocate(5);
 
-		ft::MapIterator<Bst<char, char> >	itOne(root);
+	// assign some values to array
+	psize = sizeof(std::map<char,int>::value_type)*5;
 
-		std::cout << std::endl;
-		while (itOne.root() != itOne.begin())
-			itOne--;
-		while (itOne.root() != itOne.end())
-		{
-			std::cout << itOne << std::endl;
-			itOne++;
-		}
-		std::cout << itOne << std::endl;
-		std::cout << std::endl;
-		while (itOne.root() != itOne.begin())
-		{
-			std::cout << itOne << std::endl;
-			itOne--;
-		}
-		std::cout << itOne << std::endl;
+	std::cout << "The allocated array has a size of " << psize << " bytes.\n";
 
-		Tree.clean(root);
-	}
-	return (0);
+	mymap.get_allocator().deallocate(p,5);
+	return 0;
 }

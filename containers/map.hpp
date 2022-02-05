@@ -47,10 +47,11 @@ class map
 				/** Member Objects **/
 				key_compare	comp;
 
+
+			public:
 				/** Constructor **/
 				value_compare(Compare c) : comp(c) {}
 
-			public:
 				/** Member Function **/
 				bool	operator()(const value_type& lhs, const value_type& rhs) const
 				{
@@ -62,6 +63,7 @@ class map
 		/** Member Attributes **/
 		Bst<key_type, mapped_type, key_compare, allocator_type >	_Tree;
 		Bst<key_type, mapped_type, key_compare, allocator_type >*	_root;
+		Bst<key_type, mapped_type, key_compare, allocator_type >*	_end;
 		size_type							_size;
 		key_compare							_comp;
 		allocator_type							_alloc;
@@ -72,6 +74,8 @@ class map
 			const allocator_type& alloc = allocator_type())
 		{
 			this->_root = nullptr;
+			this->_end = nullptr;
+			this->_end = this->_Tree.insert(this->_end, value_type());
 			this->_size = 0;
 			this->_comp = comp;
 			this->_alloc = alloc;
@@ -83,6 +87,8 @@ class map
 			const allocator_type& alloc = allocator_type())
 		{
 			this->_root = nullptr;
+			this->_end = nullptr;
+			this->_end = this->_Tree.insert(this->_end, value_type());
 			this->_size = 0;
 			this->_comp = comp;
 			this->_alloc = alloc;
@@ -91,7 +97,6 @@ class map
 				this->insert(*first);
 				first++;
 			}
-			this->insert(*first);
 			return ;
 		}
 
@@ -100,6 +105,8 @@ class map
 			ft::MapIterator<key_type, mapped_type>	first(other.begin());
 
 			this->_root = nullptr;
+			this->_end = nullptr;
+			this->_end = this->_Tree.insert(this->_end, value_type());
 			this->_size = 0;
 			this->_comp = other._comp;
 			this->_alloc = other._alloc;
@@ -110,7 +117,6 @@ class map
 					this->insert(*first);
 					first++;
 				}
-				this->insert(*first);
 			}
 			return ;
 		}
@@ -118,8 +124,7 @@ class map
 		/** Destructor **/
 		~map(void)
 		{
-			if (this->_size > 0)
-				this->_Tree.clean(&(this->_root));
+			this->_Tree.clean(&(this->_end));
 			return ;
 		}
 
@@ -132,6 +137,7 @@ class map
 			{
 				if (this->_size > 0)
 					this->_Tree.clean(&(this->_root));
+				this->_end->left = nullptr;
 				this->_size = 0;
 				this->_comp = other._comp;
 				this->_alloc = other._alloc;
@@ -139,10 +145,9 @@ class map
 				{
 					while (first != other.end())
 					{
-						this->insert(*first);
+						this->insert(value_type(first->first, first->second));
 						first++;
 					}
-					this->insert(*first);
 				}
 			}
 			return (*this);
@@ -165,16 +170,12 @@ class map
 
 		iterator		end(void)
 		{
-			iterator	end(this->_root);
-
-			return (iterator(end.end()));
+			return (iterator(this->_end));
 		}
 
 		const_iterator		end(void) const
 		{
-			iterator	end(this->_root);
-
-			return (iterator(end.end()));
+			return (const_iterator(this->_end));
 		}
 
 		reverse_iterator	rbegin(void) // NOTE: don't work
@@ -259,6 +260,11 @@ class map
 			this->_size += 1;
 			this->_root = this->_Tree.insert(this->_root, val);
 			comp = this->_Tree.search(this->_root, val);
+			if (this->_size == 1)
+			{
+				this->_end->left = this->_root;
+				this->_root->parent = this->_end;
+			}
 			return (ft::pair<iterator, bool>(iterator(comp), true));
 		}
 
@@ -266,12 +272,18 @@ class map
 		{
 			Bst<key_type, mapped_type, key_compare, allocator_type>*	comp;
 
+			(void)position;
 			comp = this->_Tree.search(this->_root, val);
 			if (comp == nullptr)
 			{
 				this->_size += 1;
 				this->_root = this->_Tree.insert(this->_root, val);
 				comp = this->_Tree.search(this->_root, val);
+				if (this->_size == 1)
+				{
+					this->_end->left = this->_root;
+					this->_root->parent = this->_end;
+				}
 			}
 			return (iterator(comp));
 		}
@@ -280,7 +292,9 @@ class map
 		void				insert(InputIt first, InputIt last)
 		{
 			Bst<key_type, mapped_type, key_compare, allocator_type>*	comp;
+			size_type							init;
 
+			init = this->_size;
 			while (first != last)
 			{
 				comp = this->_Tree.search(this->_root, *first);
@@ -290,6 +304,11 @@ class map
 					this->_root = this->_Tree.insert(this->_root, *first);
 				}
 				first++;
+			}
+			if (init == 0 && this->_size > 0)
+			{
+				this->_end->left = this->_root;
+				this->_root->parent = this->_end;
 			}
 			return ;
 		}
@@ -305,6 +324,13 @@ class map
 					return (0);
 				this->_root = this->_Tree.deleteNode(this->_root, value_type(k, mapped_type()));
 				this->_size -= 1;
+				if (this->_size == 0)
+					this->_end->left = nullptr;
+				else
+				{
+					this->_end->left = this->_root;
+					this->_root->parent = this->_end;
+				}
 				return (1);
 			}
 			return (0);
@@ -323,6 +349,16 @@ class map
 				this->erase(first);
 				first++;
 			}
+			return ;
+		}
+
+		void				swap(map& x)
+		{
+			map<key_type, mapped_type, key_compare, allocator_type>	tmp;
+
+			tmp = *this;
+			*this = x;
+			x = tmp;
 			return ;
 		}
 
@@ -346,27 +382,25 @@ class map
 		}
 
 		/** Operations **/
-		iterator	find(const key_type& k)
+		iterator					find(const key_type& k)
 		{
 			iterator	output(this->_Tree.search(this->_root, value_type(k, mapped_type())));
 
 			if (output.root() == nullptr)
 				return (this->end());
-			else
-				return (output);
+			return (output);
 		}
 
-		const_iterator	find(const key_type& k) const
+		const_iterator					find(const key_type& k) const
 		{
 			const_iterator	output(this->_Tree.search(this->_root, value_type(k, mapped_type())));
 
 			if (output.root() == nullptr)
 				return (this->end());
-			else
-				return (output);
+			return (output);
 		}
 
-		size_type	count(const key_type& k)
+		size_type					count(const key_type& k)
 		{
 			Bst<key_type, mapped_type, key_compare, allocator_type>*	comp;
 

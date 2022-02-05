@@ -16,7 +16,7 @@ class	Bst
 		typedef ft::pair<Key, T>			value_type;
 		typedef Compare					key_compare;
 		typedef std::ptrdiff_t				difference_type;
-		typedef Alloc					allocator_type;
+		typedef std::allocator<Bst>			allocator_type;
 		typedef value_type&				reference;
 		typedef const value_type&			const_reference;
 		typedef typename Alloc::pointer			pointer;
@@ -60,12 +60,16 @@ class	Bst
 			return (search(root->left, data));
 		}
 
-		Bst*	insert(Bst* root, value_type data) // NOTE: use allocator instead of new
+		Bst*	insert(Bst* root, value_type data)
 		{
 			Bst*	tmp;
 
 			if (root == nullptr)
-				return (new Bst(data));
+			{
+				tmp = this->_alloc.allocate(1);
+				this->_alloc.construct(tmp, Bst(data));
+				return (tmp);
+			}
 			if (this->_comp(data.first, root->data.first))
 			{
 				tmp = insert(root->left, data);
@@ -102,7 +106,8 @@ class	Bst
 				tmp = root->right;
 				if (tmp != nullptr)
 					tmp->parent = root->parent;
-				delete root;
+				this->_alloc.destroy(root);
+				this->_alloc.deallocate(root, 1);
 				return (tmp);
 			}
 			else if (root->right == nullptr)
@@ -110,7 +115,8 @@ class	Bst
 				tmp = root->left;
 				if (tmp != nullptr)
 					tmp->parent = root->parent;
-				delete root;
+				this->_alloc.destroy(root);
+				this->_alloc.deallocate(root, 1);
 				return (tmp);
 			}
 			else
@@ -132,7 +138,8 @@ class	Bst
 				root->data.first = succ->data.first;
 				root->data.second = succ->data.second;
 				root->parent = succ->parent;
-				delete succ;
+				this->_alloc.destroy(succ);
+				this->_alloc.deallocate(succ, 1);
 				return (root);
 			}
 		}
@@ -177,7 +184,8 @@ class	Bst
 				clean(&((*root)->right));
 			(*root)->left = nullptr;
 			(*root)->right = nullptr;
-			delete *root;
+			this->_alloc.destroy(*root);
+			this->_alloc.deallocate(*root, 1);
 			*root = nullptr;
 			return ;
 		}

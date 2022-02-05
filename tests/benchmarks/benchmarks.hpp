@@ -16,7 +16,7 @@ public:
 	std::clock_t stop();
 };
 
-//#	include "../../containers/map.hpp"
+#	include "../../containers/map.hpp"
 #	include "../../containers/stack.hpp"
 #	include "../../containers/vector.hpp"
 #	include <iostream>
@@ -24,8 +24,8 @@ public:
 #	include <stack>
 #	include <vector>
 
+// Map benchmark
 // mapType must be a map to int, bool.
-/**
 template <typename MapType>
 std::clock_t insert_growing(size_t times, MapType map)
 {
@@ -46,7 +46,6 @@ std::clock_t insert_growing(size_t times, MapType map)
 
 	return t.stop();
 }
-**/
 
 // Vector benchmark
 // Vector must be a vector of ints
@@ -108,7 +107,7 @@ std::clock_t s_insert_growing(size_t times, StackType stack)
 	return t.stop();
 }
 
-//void benchmark_map();
+void benchmark_map();
 void benchmark_vector();
 void benchmark_stack();
 
