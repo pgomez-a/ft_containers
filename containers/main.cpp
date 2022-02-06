@@ -11,21 +11,12 @@ void	leaks(void)
 
 int	main(void)
 {
-	atexit(leaks);
+	//atexit(leaks);
 
-	int psize;
-	ft::map<char,int> mymap;
-	ft::pair<const char,int>* p;
+	std::map<char, int>	it;
+	ft::map<char, int>	mymap;
 
-	// allocate an array of 5 elements using mymap's allocator:
-	p=mymap.get_allocator().allocate(5);
-
-	// assign some values to array
-	psize = sizeof(ft::map<char,int>::value_type)*5;
-
-	std::cout << "The allocated array has a size of " << psize << " bytes.\n";
-
-	mymap.get_allocator().deallocate(p,5);
-
+	std::cout << it.max_size() << std::endl;
+	std::cout << mymap.max_size() << std::endl;
 	return 0;
 }

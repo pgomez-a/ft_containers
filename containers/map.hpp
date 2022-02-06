@@ -18,21 +18,21 @@ class map
 {
 	public:
 		/** Member Types **/
-		typedef Key						key_type;
-		typedef T						mapped_type;
-		typedef ft::pair<const Key, T>				value_type;
-		typedef std::size_t					size_type;
-		typedef std::ptrdiff_t					difference_type;
-		typedef Compare						key_compare;
-		typedef Alloc						allocator_type;
-		typedef typename Alloc::reference			reference;
-		typedef typename Alloc::const_reference			const_reference;
-		typedef typename Alloc::pointer				pointer;
-		typedef typename Alloc::const_pointer			const_pointer;
-		typedef MapIterator<Key, T, Compare, Alloc>		iterator;
-		typedef const MapIterator<Key, T, Compare, Alloc>	const_iterator;
-		typedef ft::reverse_iterator<iterator>			reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+		typedef Key									key_type;
+		typedef T									mapped_type;
+		typedef ft::pair<const Key, T>							value_type;
+		typedef std::size_t								size_type;
+		typedef std::ptrdiff_t								difference_type;
+		typedef Compare									key_compare;
+		typedef typename Alloc::template rebind<ft::BstNode<value_type> >::other	allocator_type;
+		typedef typename allocator_type::reference					reference;
+		typedef typename Alloc::const_reference						const_reference;
+		typedef typename Alloc::pointer							pointer;
+		typedef typename Alloc::const_pointer						const_pointer;
+		typedef MapIterator<Key, T, Compare, Alloc>					iterator;
+		typedef const MapIterator<Key, T, Compare, Alloc>				const_iterator;
+		typedef ft::reverse_iterator<iterator>						reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 
 		/** Member Class **/
 		class value_compare

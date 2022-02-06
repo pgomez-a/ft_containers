@@ -172,6 +172,7 @@ class BstNode
 		BstNode*	parent;
 		BstNode*	left;
 		BstNode*	right;
+		int		mode;
 
 		/** Constructors **/
 		explicit BstNode(const value_type& value = value_type())
@@ -180,6 +181,7 @@ class BstNode
 			this->parent = nullptr;
 			this->left = nullptr;
 			this->right = nullptr;
+			this->mode = 1;
 		}
 
 		BstNode(const value_type& value, const BstNode* parent,
@@ -189,6 +191,7 @@ class BstNode
 			this->parent = parent;
 			this->left = left;
 			this->right = right;
+			this->mode = 1;
 			return ;
 		}
 
@@ -198,6 +201,7 @@ class BstNode
 			this->parent = other.parent;
 			this->left = other.left;
 			this->right = other.right;
+			this->mode = 1;
 			return ;
 		}
 
