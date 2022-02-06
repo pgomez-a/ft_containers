@@ -24,8 +24,8 @@ class map
 		typedef std::size_t								size_type;
 		typedef std::ptrdiff_t								difference_type;
 		typedef Compare									key_compare;
-		typedef typename Alloc::template rebind<ft::BstNode<value_type> >::other	allocator_type;
-		typedef typename allocator_type::reference					reference;
+		typedef Alloc									allocator_type;
+		typedef typename Alloc::reference						reference;
 		typedef typename Alloc::const_reference						const_reference;
 		typedef typename Alloc::pointer							pointer;
 		typedef typename Alloc::const_pointer						const_pointer;
@@ -33,6 +33,7 @@ class map
 		typedef const MapIterator<Key, T, Compare, Alloc>				const_iterator;
 		typedef ft::reverse_iterator<iterator>						reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
+		typedef typename Alloc::template rebind<ft::BstNode<value_type> >::other	allocator_size;
 
 		/** Member Class **/
 		class value_compare
@@ -219,7 +220,7 @@ class map
 		
 		size_type	max_size(void) const
 		{
-			return (this->_alloc.max_size());
+			return (allocator_size().max_size());
 		}
 
 		/** Element access **/
