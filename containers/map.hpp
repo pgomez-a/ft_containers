@@ -179,32 +179,24 @@ class map
 			return (const_iterator(this->_end));
 		}
 
-		reverse_iterator	rbegin(void) // NOTE: don't work
+		reverse_iterator	rbegin(void)
 		{
-			iterator	end(this->_root);
-
-			return (reverse_iterator(end.end()));
+			return (reverse_iterator(this->end()));
 		}
 
 		const_reverse_iterator	rbegin(void) const
 		{
-			iterator	end(this->_root);
-
-			return (reverse_iterator(end.end()));
+			return (reverse_iterator(this->end()));
 		}
 
 		reverse_iterator	rend(void)
 		{
-			iterator	beg(this->_root);
-
-			return (reverse_iterator(beg.begin()));
+			return (reverse_iterator(this->begin()));
 		}
 
 		const_reverse_iterator	rend(void) const
 		{
-			iterator	beg(this->_root);
-
-			return (reverse_iterator(beg.begin()));
+			return (reverse_iterator(this->begin()));
 		}
 
 		/** Capacity **/

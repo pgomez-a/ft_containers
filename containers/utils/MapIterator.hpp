@@ -16,26 +16,29 @@ class MapIterator
 	public:
 		/** Member Types **/
 		typedef std::bidirectional_iterator_tag		iterator_category;
-		typedef ft::pair<Key, T>			value_type;
+		//typedef ft::pair<Key, T>			value_type;
+		typedef Bst<Key, T, Compare, Alloc>		value_type;
 		typedef Compare					key_compare;
 		typedef std::ptrdiff_t				difference_type;
 		typedef Alloc					allocator_type;
-		typedef Bst<Key, T, Compare, Alloc>*		pointer;
-		typedef const Bst<Key, T, Compare, Alloc>*	const_pointer;
+		typedef ft::pair<Key, T>*			pointer;
+		typedef const ft::pair<Key, T>*			const_pointer;
+		typedef Bst<Key, T, Compare, Alloc>*		node_pointer;
+		typedef const Bst<Key, T, Compare, Alloc>*	const_node_pointer;
 		typedef ft::pair<Key, T>&			reference;
 		typedef const ft::pair<Key, T>&			const_reference;
 
 	private:
 		/** Private Member Attributes **/
-		pointer	_node;
-		pointer	_beg;
-		pointer	_end;
+		node_pointer	_node;
+		node_pointer	_beg;
+		node_pointer	_end;
 
 	public:
 		/** Constructors **/
-		MapIterator(pointer node = nullptr) : _node(node)
+		MapIterator(node_pointer node = nullptr) : _node(node)
 		{
-			pointer	tmp(node);
+			node_pointer	tmp(node);
 
 			if (node != nullptr && (tmp != nullptr || tmp == this->_end))
 			{
@@ -59,7 +62,7 @@ class MapIterator
 			return ;
 		}
 
-		MapIterator(pointer node, pointer beg, pointer end)
+		MapIterator(node_pointer node, node_pointer beg, node_pointer end)
 			: _node(node), _beg(beg), _end(end) {}
 
 		MapIterator(const MapIterator& other)
@@ -81,17 +84,17 @@ class MapIterator
 		}
 
 		/** Member Functions **/
-		pointer	root(void) const
+		node_pointer	root(void) const
 		{
 			return (this->_node);
 		}
 
-		pointer	begin(void) const
+		node_pointer	begin(void) const
 		{
 			return (this->_beg);
 		}
 
-		pointer	end(void) const
+		node_pointer	end(void) const
 		{
 			return (this->_end);
 		}
@@ -116,14 +119,14 @@ class MapIterator
 			return (this->_node->data);
 		}
 
-		value_type*	operator->(void) const
+		pointer		operator->(void) const
 		{
 			return (&(this->_node->data));
 		}
 
 		MapIterator&	operator++(void)
 		{
-			pointer	output;
+			node_pointer	output;
 
 			output = this->_node;
 			if (output->right != nullptr)
@@ -152,7 +155,7 @@ class MapIterator
 
 		MapIterator&	operator--(void)
 		{
-			pointer	output;
+			node_pointer	output;
 
 			output = this->_node;
 			if (output->left != nullptr)

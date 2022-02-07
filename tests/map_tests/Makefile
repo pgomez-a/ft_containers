@@ -5,6 +5,8 @@ NAME		= .time_cond_make
 SRCS		= init_map.cpp		\
 		  constructor_map.cpp	\
 		  operator=_map.cpp	\
+		  begin_end_map.cpp	\
+		  rbegin_rend_map.cpp	\
 		  empty_map.cpp		\
 		  size_map.cpp		\
 		  max_size_map.cpp	\
@@ -38,6 +40,8 @@ $(NAME):	$(OBJS)
 	$(CXX) $(CXXFLAGS) init_map.o -o init_map_test
 	$(CXX) $(CXXFLAGS) constructor_map.o -o constructor_map_test
 	$(CXX) $(CXXFLAGS) operator=_map.o -o operator=_map_test
+	$(CXX) $(CXXFLAGS) begin_end_map.o -o begin_end_map_test
+	$(CXX) $(CXXFLAGS) rbegin_rend_map.o -o rbegin_rend_map_test
 	$(CXX) $(CXXFLAGS) empty_map.o -o empty_map_test
 	$(CXX) $(CXXFLAGS) size_map.o -o size_map_test
 	$(CXX) $(CXXFLAGS) max_size_map.o -o max_size_map_test
@@ -74,6 +78,8 @@ run:		all
 	@ ./init_map_test
 	@ ./constructor_map_test
 	@ ./operator=_map_test
+	@ ./begin_end_map_test
+	@ ./rbegin_rend_map_test
 	@ ./empty_map_test
 	@ ./size_map_test
 	@ ./max_size_map_test
@@ -91,3 +97,4 @@ run:		all
 	@ ./upper_bound_map_test
 	@ ./equal_range_map_test
 	@ ./get_allocator_map_test
+	@ ./init_map_test
