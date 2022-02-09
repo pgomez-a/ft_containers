@@ -17,3 +17,6 @@ However, what I have done is create some images that show the main characteristi
 
 ### ft::stack
 ![ft::stack](https://user-images.githubusercontent.com/74931024/144308330-d583c72e-d300-4655-9a61-85200ebca76a.jpeg)
+
+### ft::map
+![ft_map](https://user-images.githubusercontent.com/74931024/153201445-802eb71c-8fbc-47b7-8959-d35f596bb6a5.jpeg)
