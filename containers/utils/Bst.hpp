@@ -64,8 +64,10 @@ class	Bst
 
 		Bst*	insert(Bst* root, value_type data)
 		{
+			int	next_bal;
 			Bst*	tmp;
 
+			next_bal = -999;
 			if (root == nullptr)
 			{
 				tmp = this->_alloc.allocate(1);
@@ -74,15 +76,27 @@ class	Bst
 			}
 			if (this->_comp(data.first, root->data.first))
 			{
+				if (root->left != nullptr)
+					next_bal = root->left->balance;
 				tmp = insert(root->left, data);
 				root->left = tmp;
 				tmp->parent = root;
+				if (!((root->left->balance < 0 && next_bal <= root->left->balance && root->left->balance < 0)
+					|| (root->left->balance > 0 && 0 < root->left->balance && root->left->balance <= next_bal)
+					|| (root->left->balance == 0 && root->left->data.first != data.first)))
+					root->balance -= 1;
 			}
 			else if (data.first != root->data.first)
 			{
+				if (root->right != nullptr)
+					next_bal = root->right->balance;
 				tmp = insert(root->right, data);
 				root->right = tmp;
 				tmp->parent = root;
+				if (!((root->right->balance < 0 && next_bal <= root->right->balance && root->right->balance < 0)
+					|| (root->right->balance > 0 && 0 < root->right->balance && root->right->balance <= next_bal)
+					|| (root->right->balance == 0 && root->right->data.first != data.first)))
+					root->balance += 1;
 			}
 			return (root);
 		}
