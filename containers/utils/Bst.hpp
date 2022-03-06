@@ -27,6 +27,7 @@ class	Bst
 		Bst*		left;
 		Bst*		right;
 		Bst*		parent;
+		int		balance;
 
 	private:
 		/** Private Member Attributes **/
@@ -42,6 +43,7 @@ class	Bst
 			this->left = nullptr;
 			this->right = nullptr;
 			this->parent = nullptr;
+			this->balance = 0;
 			this->_comp = comp;
 			this->_alloc = alloc;
 			return ;
