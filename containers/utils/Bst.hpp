@@ -62,7 +62,7 @@ class	Bst
 			return (search(root->left, data));
 		}
 
-		Bst*	insert(Bst* root, value_type data)
+		Bst*&	insert(Bst*& root, value_type data)
 		{
 			int	next_bal;
 			Bst*	tmp;
@@ -72,7 +72,8 @@ class	Bst
 			{
 				tmp = this->_alloc.allocate(1);
 				this->_alloc.construct(tmp, Bst(data));
-				return (tmp);
+				root = tmp;
+				return (root);
 			}
 			if (this->_comp(data.first, root->data.first))
 			{
@@ -98,7 +99,7 @@ class	Bst
 					|| (root->right->balance == 0 && root->right->data.first != data.first)))
 					root->balance += 1;
 			}
-			return (root);
+			return (this->rebalance(root));
 		}
 
 		Bst*	deleteNode(Bst* root, value_type data)
@@ -160,12 +161,63 @@ class	Bst
 			}
 		}
 
+		Bst*&	rebalance(Bst*& root)
+		{
+			if (root->balance == -2 && root->left != nullptr && root->left->balance == -1)
+				return (this->rotateRight(root));
+			else if (root->balance == 2 && root->right != nullptr && root->right->balance == 1)
+				return (this->rotateLeft(root));
+			else if (root->balance == -2 && root->left != nullptr && root->left->balance == 1)
+			{
+				root->left = this->rotateLeft(root->left);
+				root->left->left->balance = -1;
+				return (this->rotateRight(root));
+			}
+			else if (root->balance == 2 && root->right != nullptr && root->right->balance == -1)
+			{
+				root->right = this->rotateRight(root->right);
+				root->right->right->balance = 1;
+				return (this->rotateLeft(root));
+			}
+			return (root);
+		}
+
+		Bst*&	rotateRight(Bst*& root)
+		{
+			Bst*	tmp;
+
+			tmp = root;
+			root = root->left;
+			root->parent = tmp->parent;
+			tmp->parent = root;
+			tmp->left = root->right;
+			root->right = tmp;
+			root->balance = 0;
+			root->right->balance = 0;
+			return (root);
+		}
+
+		Bst*&	rotateLeft(Bst*& root)
+		{
+			Bst*	tmp;
+
+			tmp = root;
+			root = root->right;
+			root->parent = tmp->parent;
+			tmp->parent = root;
+			tmp->right = root->left;
+			root->left = tmp;
+			root->balance = 0;
+			root->left->balance = 0;
+			return (root);
+		}
+
 		void	inorder(Bst* root)
 		{
 			if (root == nullptr)
 				return ;
 			inorder(root->left);
-			std::cout << root->data.first << " ";
+			std::cout << "(" << root->data.first << ") -> " << root->balance << std::endl;
 			inorder(root->right);
 			return ;
 		}
