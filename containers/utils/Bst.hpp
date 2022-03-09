@@ -201,10 +201,10 @@ class	Bst
 			tmp = root;
 			root = root->right;
 			root->parent = tmp->parent;
-			if (root->parent != nullptr && root->parent->parent != nullptr)
-				root->parent->right = root;
-			else if (root->parent != nullptr)
+			if (root->parent != nullptr && root->parent->left == tmp)
 				root->parent->left = root;
+			else if (root->parent != nullptr)
+				root->parent->right = root;
 			tmp->parent = root;
 			tmp->right = root->left;
 			if (tmp->right != nullptr)
