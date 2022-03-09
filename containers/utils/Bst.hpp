@@ -164,52 +164,110 @@ class	Bst
 		Bst*&	rebalance(Bst*& root)
 		{
 			if (root->balance == -2 && root->left != nullptr && root->left->balance == -1)
-				return (this->rotateRight(root));
+				return (this->rotateRight(0, root));
 			else if (root->balance == 2 && root->right != nullptr && root->right->balance == 1)
-				return (this->rotateLeft(root));
+				return (this->rotateLeft(0, root));
 			else if (root->balance == -2 && root->left != nullptr && root->left->balance == 1)
-			{
-				root->left = this->rotateLeft(root->left);
-				root->left->left->balance = -1;
-				return (this->rotateRight(root));
-			}
+				return (this->rotateLeftRight(root));
 			else if (root->balance == 2 && root->right != nullptr && root->right->balance == -1)
-			{
-				root->right = this->rotateRight(root->right);
-				root->right->right->balance = 1;
-				return (this->rotateLeft(root));
-			}
+				return (this->rotateRightLeft(root));
 			return (root);
 		}
 
-		Bst*&	rotateRight(Bst*& root)
+		Bst*&	rotateRight(int mode, Bst*& root)
 		{
 			Bst*	tmp;
 
 			tmp = root;
 			root = root->left;
 			root->parent = tmp->parent;
+			if (root->parent != nullptr)
+				root->parent->left = root;
 			tmp->parent = root;
 			tmp->left = root->right;
+			if (tmp->left != nullptr)
+				tmp->left->parent = tmp;
 			root->right = tmp;
 			root->balance = 0;
-			root->right->balance = 0;
+			if (mode != 1)
+				root->right->balance = 0;
 			return (root);
 		}
 
-		Bst*&	rotateLeft(Bst*& root)
+		Bst*&	rotateLeft(int mode, Bst*& root)
 		{
 			Bst*	tmp;
 
 			tmp = root;
 			root = root->right;
 			root->parent = tmp->parent;
+			if (root->parent != nullptr && root->parent->parent != nullptr)
+				root->parent->right = root;
+			else if (root->parent != nullptr)
+				root->parent->left = root;
 			tmp->parent = root;
 			tmp->right = root->left;
+			if (tmp->right != nullptr)
+				tmp->right->parent = tmp;
 			root->left = tmp;
 			root->balance = 0;
-			root->left->balance = 0;
+			if (mode != 1)
+				root->left->balance = 0;
 			return (root);
+		}
+
+		Bst*&	rotateLeftRight(Bst*& root)
+		{
+			int	mode;
+			Bst*	tmp;
+
+			mode = 0;
+			if (root->left->right->balance == 1)
+				root->left->balance = -1;
+			else if (root->left->right->balance == -1)
+			{
+				root->balance = 1;
+				root->left->balance = 0;
+				mode = 1;
+			}
+			else
+				root->left->balance = 0;
+			tmp = root->left;
+			root->left = tmp->right;
+			root->left->parent = root;
+			tmp->right = root->left->left;
+			if (tmp->right != nullptr)
+				tmp->right->parent = tmp;
+			root->left->left = tmp;
+			tmp->parent = root->left;
+			return (this->rotateRight(mode, root));
+		}
+
+		Bst*&	rotateRightLeft(Bst*& root)
+		{
+			int	mode;
+			Bst*	tmp;
+
+			mode = 0;
+			if (root->right->left->balance == 1)
+				root->right->balance = -1;
+			else if (root->right->left->balance == -1)
+			{
+				root->balance = 1;
+				root->right->balance = 0;
+				mode = 1;
+			}
+			else
+				root->right->balance = 0;
+			tmp = root->right;
+			root->right = tmp->left;
+			root->right->parent = root;
+			tmp->left = root->right->right;
+			if (tmp->left != nullptr)
+				tmp->left->parent = tmp;
+			root->right->right = tmp;
+			tmp->parent = root->right;
+			return (this->rotateLeft(mode, root));
 		}
 
 		void	inorder(Bst* root)
@@ -226,7 +284,7 @@ class	Bst
 		{
 			if (root == nullptr)
 				return ;
-			std::cout << root->data.first << " ";
+			std::cout << "(" << root->data.first << ") -> " << root->balance << std::endl;
 			preorder(root->left);
 			preorder(root->right);
 			return ;

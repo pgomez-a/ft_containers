@@ -40,9 +40,9 @@ void benchmark_map()
 	std::map<int, bool> sm1;
 	ft::map<int, bool> m1;
 
-	std = insert_growing(2000, sm1);
+	std = insert_growing(200000, sm1);
 	std::cout << "Std: " << std << std::endl;
-	ft = insert_growing(2000, m1);
+	ft = insert_growing(200000, m1);
 	std::cout << "Ft: " << ft << std::endl;
 
 	if ((double)ft / (double)std < 1.0000)

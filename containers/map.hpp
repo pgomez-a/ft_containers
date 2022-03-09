@@ -252,12 +252,14 @@ class map
 				return (ft::pair<iterator, bool>(iterator(comp), false));
 			this->_size += 1;
 			this->_root = this->_Tree.insert(this->_root, val);
-			comp = this->_Tree.search(this->_root, val);
+			while (this->_root->parent != nullptr && this->_root->parent->parent != nullptr)
+				this->_root = this->_root->parent;
 			if (this->_size == 1)
 			{
 				this->_end->left = this->_root;
 				this->_root->parent = this->_end;
 			}
+			comp = this->_Tree.search(this->_root, val);
 			return (ft::pair<iterator, bool>(iterator(comp), true));
 		}
 
@@ -271,6 +273,8 @@ class map
 			{
 				this->_size += 1;
 				this->_root = this->_Tree.insert(this->_root, val);
+				while (this->_root->parent != nullptr && this->_root->parent->parent != nullptr)
+					this->_root = this->_root->parent;
 				comp = this->_Tree.search(this->_root, val);
 				if (this->_size == 1)
 				{
@@ -295,6 +299,8 @@ class map
 				{
 					this->_size += 1;
 					this->_root = this->_Tree.insert(this->_root, *first);
+					while (this->_root->parent != nullptr && this->_root->parent->parent != nullptr)
+						this->_root = this->_root->parent;
 				}
 				first++;
 			}

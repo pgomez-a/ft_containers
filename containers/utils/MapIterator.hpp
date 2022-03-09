@@ -42,7 +42,7 @@ class MapIterator
 
 			if (node != nullptr && (tmp != nullptr || tmp == this->_end))
 			{
-				while (tmp->parent != nullptr)
+				while (tmp->parent != nullptr && tmp->parent->parent != nullptr)
 					tmp = tmp->parent;
 				while (tmp->left != nullptr)
 					tmp = tmp->left;
@@ -50,9 +50,7 @@ class MapIterator
 				tmp = node;
 				while (tmp->parent != nullptr)
 					tmp = tmp->parent;
-				while (tmp->right != nullptr)
-					tmp = tmp->right;
-				this->_end = tmp->right;
+				this->_end = tmp;
 			}
 			else
 			{
