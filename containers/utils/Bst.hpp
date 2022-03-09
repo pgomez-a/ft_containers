@@ -249,11 +249,11 @@ class	Bst
 			Bst*	tmp;
 
 			mode = 0;
-			if (root->right->left->balance == 1)
-				root->right->balance = -1;
-			else if (root->right->left->balance == -1)
+			if (root->right->left->balance == -1)
+				root->right->balance = 1;
+			else if (root->right->left->balance == 1)
 			{
-				root->balance = 1;
+				root->balance = -1;
 				root->right->balance = 0;
 				mode = 1;
 			}
