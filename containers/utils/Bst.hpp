@@ -82,8 +82,8 @@ class	Bst
 				tmp = insert(root->left, data);
 				root->left = tmp;
 				tmp->parent = root;
-				if (!((root->left->balance < 0 && next_bal <= root->left->balance && root->left->balance < 0)
-					|| (root->left->balance > 0 && 0 < root->left->balance && root->left->balance <= next_bal)
+				if (!((next_bal <= root->left->balance && root->left->balance < 0)
+					|| (0 < root->left->balance && root->left->balance <= next_bal)
 					|| (root->left->balance == 0 && root->left->data.first != data.first)))
 					root->balance -= 1;
 			}
@@ -94,8 +94,8 @@ class	Bst
 				tmp = insert(root->right, data);
 				root->right = tmp;
 				tmp->parent = root;
-				if (!((root->right->balance < 0 && next_bal <= root->right->balance && root->right->balance < 0)
-					|| (root->right->balance > 0 && 0 < root->right->balance && root->right->balance <= next_bal)
+				if (!((next_bal <= root->right->balance && root->right->balance < 0)
+					|| (0 < root->right->balance && root->right->balance <= next_bal)
 					|| (root->right->balance == 0 && root->right->data.first != data.first)))
 					root->balance += 1;
 			}
@@ -104,25 +104,43 @@ class	Bst
 
 		Bst*	deleteNode(Bst* root, value_type data)
 		{
+			int	next_bal;
 			Bst*	tmp;
 
+			next_bal = -999;
 			if (root == nullptr)
 				return (root);
 			if (this->_comp(root->data.first, data.first))
 			{
+				if (root->right != nullptr)
+					next_bal = root->right->balance;
 				root->right = deleteNode(root->right, data);
-				return (root);
+				if ((root->right == nullptr && next_bal != -999)
+					|| (next_bal < root->right->balance && root->right->balance <= 0)
+					|| (0 <= root->right->balance && root->right->balance < next_bal))
+					root->balance -= 1;
+				return (this->rebalance(root));
 			}
 			else if (root->data.first != data.first)
 			{
+				if (root->left != nullptr)
+					next_bal = root->left->balance;
 				root->left = deleteNode(root->left, data);
-				return (root);
+				if ((root->left == nullptr && next_bal != -999)
+					|| (next_bal < root->left->balance && root->left->balance <= 0)
+					|| (0 <= root->left->balance && root->left->balance < next_bal))
+					root->balance += 1;
+				return (this->rebalance(root));
 			}
 			if (root->left == nullptr)
 			{
 				tmp = root->right;
 				if (tmp != nullptr)
 					tmp->parent = root->parent;
+				if (root->parent != nullptr && root->parent->left == root)
+					root->parent->left = tmp;
+				else if (root->parent != nullptr)
+					root->parent->right = tmp;
 				this->_alloc.destroy(root);
 				this->_alloc.deallocate(root, 1);
 				return (tmp);
@@ -132,6 +150,10 @@ class	Bst
 				tmp = root->left;
 				if (tmp != nullptr)
 					tmp->parent = root->parent;
+				if (root->parent != nullptr && root->parent->left == root)
+					root->parent->left = tmp;
+				else if (root->parent != nullptr)
+					root->parent->right = tmp;
 				this->_alloc.destroy(root);
 				this->_alloc.deallocate(root, 1);
 				return (tmp);
@@ -141,6 +163,7 @@ class	Bst
 				Bst*	parent;
 				Bst*	succ;
 
+				root->balance -= 1;
 				parent = root;
 				succ = root->right;
 				while (succ->left != nullptr)
@@ -154,7 +177,7 @@ class	Bst
 					parent->right = succ->right;
 				root->data.first = succ->data.first;
 				root->data.second = succ->data.second;
-				root->parent = succ->parent;
+				//root->parent = succ->parent;
 				this->_alloc.destroy(succ);
 				this->_alloc.deallocate(succ, 1);
 				return (root);

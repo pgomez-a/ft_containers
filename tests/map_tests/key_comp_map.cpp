@@ -21,8 +21,7 @@ int	main(void)
 		std::map<char, int, std::greater<char> >		mymap;
 		std::map<char, int, std::greater<char> >::key_compare	key = mymap.key_comp();
 
-		mymap['p'] = 100;
-		mymap['a'] = 200;
+		mymap['a'] = 100;
 		mymap['b'] = 300;
 		mymap['l'] = 400;
 		mymap['o'] = 500;
@@ -40,8 +39,7 @@ int	main(void)
 		ft::map<char, int, std::greater<char> >		mymap;
 		ft::map<char, int, std::greater<char> >::key_compare	key = mymap.key_comp();
 
-		mymap['p'] = 100;
-		mymap['a'] = 200;
+		mymap['a'] = 100;
 		mymap['b'] = 300;
 		mymap['l'] = 400;
 		mymap['o'] = 500;

@@ -21,7 +21,6 @@ int	main(void)
 		std::map<char, int>	mymap;
 		std::pair<char, int>	pair('f', 0);
 
-		mymap['p'] = 100;
 		mymap['a'] = 200;
 		mymap['b'] = 300;
 		mymap['l'] = 400;
@@ -43,7 +42,6 @@ int	main(void)
 		ft::map<char, int>	mymap;
 		ft::pair<char, int>	pair('f', 0);
 
-		mymap['p'] = 100;
 		mymap['a'] = 200;
 		mymap['b'] = 300;
 		mymap['l'] = 400;
