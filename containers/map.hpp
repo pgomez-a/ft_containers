@@ -353,11 +353,27 @@ class map
 
 		void				swap(map& x)
 		{
-			map<key_type, mapped_type, key_compare, allocator_type>	tmp;
+			Bst<key_type, mapped_type, key_compare, allocator_type>*	tmp_rot;
+			Bst<key_type, mapped_type, key_compare, allocator_type>*	tmp_end;
+			size_type							tmp_siz;
+			key_compare							tmp_cmp;
+			allocator_type							tmp_alc;
 
-			tmp = *this;
-			*this = x;
-			x = tmp;
+			tmp_rot = x._root;
+			tmp_end = x._end;
+			tmp_siz = x._size;
+			tmp_cmp = x._comp;
+			tmp_alc = x._alloc;
+			x._root = this->_root;
+			x._end = this->_end;
+			x._size = this->_size;
+			x._comp = this->_comp;
+			x._alloc = this->_alloc;
+			this->_root = tmp_rot;
+			this->_end = tmp_end;
+			this->_size = tmp_siz;
+			this->_comp = tmp_cmp;
+			this->_alloc = tmp_alc;
 			return ;
 		}
 

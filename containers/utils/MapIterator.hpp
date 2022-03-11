@@ -70,13 +70,27 @@ class MapIterator
 		~MapIterator(void) {}
 
 		/** Assignation Operator **/
-		MapIterator&	operator=(const MapIterator& other)
+		MapIterator&		operator=(const MapIterator& other)
 		{
 			if (this != &other)
 			{
 				this->_node = other._node;
 				this->_beg = other._beg;
 				this->_end = other._end;
+			}
+			return (*this);
+		}
+
+		const MapIterator&	operator=(const MapIterator& other) const
+		{
+			MapIterator*	tmp;
+
+			if (this != &other)
+			{
+				tmp = const_cast<MapIterator*>(this);
+				tmp->_node = other._node;
+				tmp->_beg = other._beg;
+				tmp->_end = other._end;
 			}
 			return (*this);
 		}
@@ -98,14 +112,14 @@ class MapIterator
 		}
 
 		/** Overloads **/
-		bool		operator==(const MapIterator& other)
+		bool		operator==(const MapIterator& other) const
 		{
 			if (this->_node == other._node)
 				return (true);
 			return (false);
 		}
 
-		bool		operator!=(const MapIterator& other)
+		bool		operator!=(const MapIterator& other) const
 		{
 			if (this->_node != other._node)
 				return (true);

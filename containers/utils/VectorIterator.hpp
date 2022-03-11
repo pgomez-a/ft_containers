@@ -33,9 +33,22 @@ class	VectorIterator : public ft::iterator_traits<T*>
 		~VectorIterator(void) {}
 
 		/** Assignation Operator **/
-		VectorIterator&	operator=(const VectorIterator& other)
+		VectorIterator&		operator=(const VectorIterator& other)
 		{
-			this->_ptr_it = other._ptr_it;
+			if (this != &other)
+				this->_ptr_it = other._ptr_it;
+			return (*this);
+		}
+
+		const VectorIterator&	operator=(const VectorIterator& other) const
+		{
+			VectorIterator*	tmp;
+
+			if (this != &other)
+			{
+				tmp = const_cast<VectorIterator*>(this);
+				tmp->_ptr_it = other._ptr_it;
+			}
 			return (*this);
 		}
 

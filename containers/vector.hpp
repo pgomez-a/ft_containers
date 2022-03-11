@@ -480,11 +480,23 @@ class	vector
 
 		void			swap(vector& other)
 		{
-			vector	tmp;
+			pointer		tmp_ptr;
+			size_type	tmp_siz;
+			size_type	tmp_cap;
+			allocator_type	tmp_alc;
 
-			tmp = *this;
-			*this = other;
-			other = tmp;
+			tmp_ptr = other._vector_ptr;
+			tmp_siz = other._size;
+			tmp_cap = other._capacity;
+			tmp_alc = other._allocator;
+			other._vector_ptr = this->_vector_ptr;
+			other._size = this->_size;
+			other._capacity = this->_capacity;
+			other._allocator = this->_allocator;
+			this->_vector_ptr = tmp_ptr;
+			this->_size = tmp_siz;
+			this->_capacity = tmp_cap;
+			this->_allocator = tmp_alc;
 			return ;
 		}
 
