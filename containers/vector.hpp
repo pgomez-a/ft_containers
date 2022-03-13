@@ -22,8 +22,8 @@ class	vector
 		typedef const T&				const_reference;
 		typedef typename Allocator::pointer		pointer;
 		typedef typename Allocator::const_pointer	const_pointer;
-		typedef VectorIterator<T>			iterator;
-		typedef const VectorIterator<T>			const_iterator;
+		typedef VectorIterator<pointer>			iterator;
+		typedef VectorIterator<const_pointer>		const_iterator;
 		typedef ft::reverse_iterator<iterator>		reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
 
@@ -103,22 +103,22 @@ class	vector
 		/** Iterators **/
 		iterator		begin(void)
 		{
-			return (VectorIterator<value_type>(this->_vector_ptr));
+			return (iterator(this->_vector_ptr));
 		}
 
 		const_iterator		begin(void) const
 		{
-			return (VectorIterator<value_type>(this->_vector_ptr));
+			return (const_iterator(this->_vector_ptr));
 		}
 
 		iterator		end(void)
 		{
-			return (VectorIterator<value_type>(this->_vector_ptr + this->_size));
+			return (iterator(this->_vector_ptr + this->_size));
 		}
 
 		const_iterator		end(void) const
 		{
-			return (VectorIterator<value_type>(this->_vector_ptr + this->_size));
+			return (const_iterator(this->_vector_ptr + this->_size));
 		}
 
 		reverse_iterator	rbegin(void)
@@ -178,7 +178,7 @@ class	vector
 			}
 			else if (count > this->_size && count <= this->_capacity)
 			{
-				begin = this->begin() + this->_size;
+				begin = this->end();
 				end = this->begin() + count;
 				modify_ptr = this->_vector_ptr + this->_size;
 				while (begin != end)
@@ -195,16 +195,13 @@ class	vector
 					this->reserve(this->_capacity * 2);
 				else
 					this->reserve(count);
-				begin = this->begin() + this->_size - 1;
-				end = this->end();
 				modify_ptr = this->_vector_ptr + this->_size;
-				while (begin != end)
+				while (this->_size < count)
 				{
 					this->_allocator.construct(modify_ptr, value);
 					modify_ptr++;
-					begin++;
+					this->_size++;
 				}
-				this->_size = count;
 			}
 			return ;
 		}
@@ -256,11 +253,15 @@ class	vector
 
 		reference		at(size_type pos)
 		{
+			if (pos >= this->_size)
+				throw std::out_of_range("out of range");
 			return (*(this->_vector_ptr + pos));
 		}
 
 		const_reference		at(size_type pos) const
 		{
+			if (pos >= this->_size)
+				throw std::out_of_range("out of range");
 			return (*(this->_vector_ptr + pos));
 		}
 
@@ -309,8 +310,15 @@ class	vector
 		{
 			size_type	capacity;
 			pointer		modify_ptr;
+			InputIt		tmp_first;
 
-			capacity = last - first;
+			capacity = 0;
+			tmp_first = first;
+			while (tmp_first != last)
+			{
+				capacity++;
+				tmp_first++;
+			}
 			if (capacity > this->_capacity)
 				this->resize(capacity);
 			this->_size = capacity;
@@ -405,9 +413,16 @@ class	vector
 			difference_type	count;
 			iterator	end;
 			pointer		modify_ptr;
+			InputIt		tmp_first;
 
+			count = 0;
+			tmp_first = first;
+			while (tmp_first != last)
+			{
+				count++;
+				tmp_first++;
+			}
 			diff = pos - this->begin();
-			count = last - first;
 			if (this->_size + count > this->_capacity)
 				this->resize(this->_size + count);
 			else
@@ -422,8 +437,7 @@ class	vector
 			}
 			while (end != this->begin() + diff - 1)
 			{
-				*modify_ptr = *(last - 1);
-				last--;
+				*modify_ptr = *(--last);
 				modify_ptr--;
 				end--;
 			}
@@ -517,8 +531,8 @@ class	vector
 template < typename T, typename Alloc >
 bool	operator==(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
 {
-	typename ft::vector<T>::iterator	beg_lhs;
-	typename ft::vector<T>::iterator	beg_rhs;
+	typename ft::vector<T, Alloc>::const_iterator	beg_lhs;
+	typename ft::vector<T, Alloc>::const_iterator	beg_rhs;
 
 	if (lhs.size() == rhs.size())
 	{
@@ -545,8 +559,8 @@ bool	operator!=(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs
 template < typename T, typename Alloc >
 bool	operator<(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
 {
-	typename ft::vector<T>::iterator	beg_lhs;
-	typename ft::vector<T>::iterator	beg_rhs;
+	typename ft::vector<T, Alloc>::const_iterator	beg_lhs;
+	typename ft::vector<T, Alloc>::const_iterator	beg_rhs;
 
 	beg_lhs = lhs.begin();
 	beg_rhs = rhs.begin();
@@ -559,6 +573,8 @@ bool	operator<(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
 		beg_lhs++;
 		beg_rhs++;
 	}
+	if (beg_lhs == lhs.end() && beg_rhs != rhs.end())
+		return (true);
 	return (false);
 }
 
