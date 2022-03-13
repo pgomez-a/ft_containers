@@ -14,26 +14,17 @@ class	stack
 {
 	public:
 		/** Member Types **/
-		typedef Container				container_type;
-		typedef typename Container::value_type		value_type;
-		typedef typename Container::size_type		size_type;
-		typedef typename Container::reference		reference;
-		typedef typename Container::const_reference	const_reference;
+		typedef typename Container::value_type	value_type;
+		typedef typename Container::size_type	size_type;
+		typedef Container			container_type;
 
 	protected:
 		container_type	_ctnr;
 
 	public:
 		/** Constuctor **/
-		explicit stack(const container_type& other = container_type()) : _ctnr(other)
-		{
-			return ;
-		}
-
-		stack(const stack& other) : _ctnr(other._ctnr)
-		{
-			return ;
-		}
+		explicit stack(const container_type& other = container_type()) : _ctnr(other) {}
+		stack(const stack& other) : _ctnr(other._ctnr) {}
 
 		/** Destructor **/
 		~stack(void) {};
@@ -69,13 +60,16 @@ class	stack
 		void			push(const value_type& val)
 		{
 			this->_ctnr.push_back(val);
+			return ;
 		}
 
 		void			pop(void)
 		{
 			this->_ctnr.pop_back();
+			return ;
 		}
 
+		/** Relational Operators **/
 		friend bool	operator==(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
 		{
 			return (lhs._ctnr == rhs._ctnr);
@@ -90,12 +84,12 @@ class	stack
 		{
 			return (lhs._ctnr < rhs._ctnr);
 		}
-		
+
 		friend bool	operator<=(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
 		{
 			return (lhs._ctnr <= rhs._ctnr);
 		}
-		
+
 		friend bool	operator>(const stack<T, Container>& lhs, const stack<T, Container>& rhs)
 		{
 			return (lhs._ctnr > rhs._ctnr);

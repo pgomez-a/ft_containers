@@ -117,6 +117,7 @@ class	VectorIterator
 		}
 };
 
+/** Relational Operators **/
 template < typename T, typename U >
 bool	operator==(const VectorIterator<T>& lhs, const VectorIterator<U>& rhs)
 {
@@ -153,6 +154,7 @@ bool	operator>=(const VectorIterator<T>& lhs, const VectorIterator<U>& rhs)
 	return (lhs.base() >= rhs.base());
 }
 
+/** Arithmetic Operators **/
 template < typename T >
 VectorIterator<T>	operator+(typename VectorIterator<T>::difference_type n, const VectorIterator<T>& it)
 {

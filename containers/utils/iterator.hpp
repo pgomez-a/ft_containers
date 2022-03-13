@@ -63,18 +63,18 @@ class reverse_iterator
 
 		~reverse_iterator(void) {}
 
-		/** Base **/
-		iterator_type		base() const
-		{
-			return (this->_iter);
-		}
-
 		/** Assignation Operator **/
 		template < typename U >
 		reverse_iterator&	operator=(const reverse_iterator<U>& other)
 		{
 			this->_iter = other.base();
 			return (*this);
+		}
+
+		/** Base **/
+		iterator_type		base(void) const
+		{
+			return (this->_iter);
 		}
 
 		/** Member Functions **/
@@ -144,8 +144,7 @@ class reverse_iterator
 		}
 };
 
-/** Non-Member Functions **/
-
+/** Relational Operators **/
 template < typename T, typename U>
 bool	operator==(const reverse_iterator<T>& lhs, const reverse_iterator<U>& rhs)
 {
@@ -182,6 +181,7 @@ bool	operator>=(const reverse_iterator<T>& lhs, const reverse_iterator<U>& rhs)
 	return (lhs.base() <= rhs.base());
 }
 
+/** Arithmetic Operators **/
 template < typename T >
 reverse_iterator<T>	operator+(typename reverse_iterator<T>::difference_type n, const reverse_iterator<T>& rev_it)
 {

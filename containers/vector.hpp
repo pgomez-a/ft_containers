@@ -16,16 +16,16 @@ class	vector
 		/** Member Types **/
 		typedef T 					value_type;
 		typedef Allocator				allocator_type;
-		typedef std::size_t				size_type;
-		typedef std::ptrdiff_t				difference_type;
-		typedef T&					reference;
-		typedef const T&				const_reference;
+		typedef typename Allocator::reference		reference;
+		typedef typename Allocator::const_reference	const_reference;
 		typedef typename Allocator::pointer		pointer;
 		typedef typename Allocator::const_pointer	const_pointer;
 		typedef VectorIterator<pointer>			iterator;
 		typedef VectorIterator<const_pointer>		const_iterator;
 		typedef ft::reverse_iterator<iterator>		reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
+		typedef std::ptrdiff_t				difference_type;
+		typedef std::size_t				size_type;
 
 	private:
 		/** Member Attributes **/
@@ -235,12 +235,10 @@ class	vector
 
 		bool			empty(void) const
 		{
-			if (this->_size > 0)
-				return (false);
-			return (true);
+			return (this->_size == 0);
 		}
 
-		/** Element access **/
+		/** Element Access **/
 		reference		operator[](size_type pos)
 		{
 			return (*(this->_vector_ptr + pos));
@@ -528,6 +526,7 @@ class	vector
 		}
 };
 
+/** Relational Operators **/
 template < typename T, typename Alloc >
 bool	operator==(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
 {
@@ -596,6 +595,7 @@ bool	operator>=(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs
 	return (!(lhs < rhs));
 }
 
+/** Swap non-member function **/
 template < typename T, typename Alloc >
 void	swap(ft::vector<T, Alloc>& x, ft::vector<T, Alloc>& y)
 {
