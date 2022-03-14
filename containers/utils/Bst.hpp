@@ -11,16 +11,17 @@ class	Bst
 {
 	public:
 		/** Member Types **/
-		typedef Key					key_type;
-		typedef T					mapped_type;
-		typedef ft::pair<Key, T>			value_type;
-		typedef Compare					key_compare;
-		typedef std::ptrdiff_t				difference_type;
-		typedef std::allocator<Bst>			allocator_type;
-		typedef value_type&				reference;
-		typedef const value_type&			const_reference;
-		typedef typename Alloc::pointer			pointer;
-		typedef typename Alloc::const_pointer		const_pointer;
+		typedef Key								key_type;
+		typedef T								mapped_type;
+		typedef ft::pair<Key, T>						value_type;
+		typedef Compare								key_compare;
+		typedef typename Alloc::template rebind<Bst>::other			allocator_type;
+		typedef typename Alloc::reference					reference;
+		typedef typename Alloc::const_reference					const_reference;
+		typedef typename Alloc::pointer						pointer;
+		typedef typename Alloc::const_pointer					const_pointer;
+		typedef std::size_t							size_type;
+		typedef std::ptrdiff_t							difference_type;
 
 		/** Member Attributes **/
 		value_type	data;
@@ -49,11 +50,37 @@ class	Bst
 			return ;
 		}
 
+		Bst&	operator=(const Bst& other)
+		{
+			this->data = other.data;
+			this->left = other.left;
+			this->right = other.right;
+			this->parent = other.parent;
+			this->_comp = other.key_comp();
+			this->_alloc = other.get_allocator();
+			return (*this);
+		}
+
 		/** Destructor **/
 		~Bst(void) {}
 
 		/** Member Functions **/
-		Bst*	search(Bst* root, value_type data)
+		size_type	max_size(void) const
+		{
+			return (this->_alloc.max_size());
+		}
+
+		key_compare	key_comp(void) const
+		{
+			return (this->_comp);
+		}
+
+		allocator_type	get_allocator(void) const
+		{
+			return (this->_alloc);
+		}
+
+		Bst*	search(Bst* root, value_type data) const
 		{
 			if (root == nullptr || root->data.first == data.first)
 				return (root);
@@ -99,7 +126,8 @@ class	Bst
 					|| (root->right->balance == 0 && root->right->data.first != data.first)))
 					root->balance += 1;
 			}
-			return (this->rebalance(root));
+			//return (this->rebalance(root));
+			return (root);
 		}
 
 		Bst*	deleteNode(Bst* root, value_type data)
@@ -119,7 +147,8 @@ class	Bst
 					|| (next_bal < root->right->balance && root->right->balance <= 0)
 					|| (0 <= root->right->balance && root->right->balance < next_bal))
 					root->balance -= 1;
-				return (this->rebalance(root));
+				//return (this->rebalance(root));
+				return (root);
 			}
 			else if (root->data.first != data.first)
 			{
@@ -130,7 +159,8 @@ class	Bst
 					|| (next_bal < root->left->balance && root->left->balance <= 0)
 					|| (0 <= root->left->balance && root->left->balance < next_bal))
 					root->balance += 1;
-				return (this->rebalance(root));
+				//return (this->rebalance(root));
+				return (root);
 			}
 			if (root->left == nullptr)
 			{

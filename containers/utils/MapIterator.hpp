@@ -9,36 +9,31 @@
 namespace ft
 {
 
-template < typename Key, typename T, typename Compare = std::less<Key>,
-	 typename Alloc = std::allocator<ft::pair<Key, T> > >
+template < typename Node, typename T>
 class MapIterator
 {
 	public:
 		/** Member Types **/
-		typedef std::bidirectional_iterator_tag		iterator_category;
-		//typedef ft::pair<Key, T>			value_type;
-		typedef Bst<Key, T, Compare, Alloc>		value_type;
-		typedef Compare					key_compare;
-		typedef std::ptrdiff_t				difference_type;
-		typedef Alloc					allocator_type;
-		typedef ft::pair<Key, T>*			pointer;
-		typedef const ft::pair<Key, T>*			const_pointer;
-		typedef Bst<Key, T, Compare, Alloc>*		node_pointer;
-		typedef const Bst<Key, T, Compare, Alloc>*	const_node_pointer;
-		typedef ft::pair<Key, T>&			reference;
-		typedef const ft::pair<Key, T>&			const_reference;
+		typedef std::bidirectional_iterator_tag				iterator_category;
+		typedef typename ft::iterator_traits<Node>::value_type		node;
+		typedef typename ft::iterator_traits<Node>::difference_type	difference_type;
+		typedef typename ft::iterator_traits<Node>::pointer		nodePtr;
+		typedef typename ft::iterator_traits<Node>::reference		nodeRef;
+		typedef T							value_type;
+		typedef T*							pointer;
+		typedef T&							reference;
 
 	private:
 		/** Private Member Attributes **/
-		node_pointer	_node;
-		node_pointer	_beg;
-		node_pointer	_end;
+		nodePtr	_node;
+		nodePtr	_beg;
+		nodePtr	_end;
 
 	public:
 		/** Constructors **/
-		MapIterator(node_pointer node = nullptr) : _node(node)
+		MapIterator(nodePtr node = nullptr) : _node(node)
 		{
-			node_pointer	tmp(node);
+			nodePtr	tmp(node);
 
 			if (node != nullptr && (tmp != nullptr || tmp == this->_end))
 			{
@@ -60,72 +55,43 @@ class MapIterator
 			return ;
 		}
 
-		MapIterator(node_pointer node, node_pointer beg, node_pointer end)
-			: _node(node), _beg(beg), _end(end) {}
-
-		MapIterator(const MapIterator& other)
-			: _node(other._node), _beg(other._beg), _end(other._end) {}
+		template < typename UNode, typename U >
+		MapIterator(const MapIterator<UNode, U>& other)
+		{
+			*this = other;
+			return ;
+		}
 
 		/** Destructor **/
 		~MapIterator(void) {}
 
 		/** Assignation Operator **/
-		MapIterator&		operator=(const MapIterator& other)
+		template < typename UNode, typename U >
+		MapIterator&		operator=(const MapIterator<UNode, U>& other)
 		{
-			if (this != &other)
-			{
-				this->_node = other._node;
-				this->_beg = other._beg;
-				this->_end = other._end;
-			}
-			return (*this);
-		}
-
-		const MapIterator&	operator=(const MapIterator& other) const
-		{
-			MapIterator*	tmp;
-
-			if (this != &other)
-			{
-				tmp = const_cast<MapIterator*>(this);
-				tmp->_node = other._node;
-				tmp->_beg = other._beg;
-				tmp->_end = other._end;
-			}
+			this->_node = other.root();
+			this->_beg = other.begin();
+			this->_end = other.end();
 			return (*this);
 		}
 
 		/** Member Functions **/
-		node_pointer	root(void) const
+		nodePtr	root(void) const
 		{
 			return (this->_node);
 		}
 
-		node_pointer	begin(void) const
+		nodePtr	begin(void) const
 		{
 			return (this->_beg);
 		}
 
-		node_pointer	end(void) const
+		nodePtr	end(void) const
 		{
 			return (this->_end);
 		}
 
-		/** Overloads **/
-		bool		operator==(const MapIterator& other) const
-		{
-			if (this->_node == other._node)
-				return (true);
-			return (false);
-		}
-
-		bool		operator!=(const MapIterator& other) const
-		{
-			if (this->_node != other._node)
-				return (true);
-			return (false);
-		}
-
+		/** Member Functions **/
 		reference	operator*(void) const
 		{
 			return (this->_node->data);
@@ -138,10 +104,10 @@ class MapIterator
 
 		MapIterator&	operator++(void)
 		{
-			node_pointer	output;
+			nodePtr	output;
 
 			output = this->_node;
-			if (output->right != nullptr)
+			if (output != nullptr && output->right != nullptr)
 			{
 				output = output->right;
 				while (output->left != nullptr)
@@ -167,7 +133,7 @@ class MapIterator
 
 		MapIterator&	operator--(void)
 		{
-			node_pointer	output;
+			nodePtr	output;
 
 			output = this->_node;
 			if (output->left != nullptr)
@@ -195,11 +161,17 @@ class MapIterator
 		}
 };
 
-template < typename Key, typename T>
-std::ostream&	operator<<(std::ostream& out, const MapIterator<Key, T>& other)
+/** Relational Operators **/
+template < typename TNode, typename T, typename UNode, typename U >
+bool	operator==(const MapIterator<TNode, T>& lhs, const MapIterator<UNode, U> rhs)
 {
-	out << (*other).first << ", " << (*other).second;
-	return (out);
+	return (lhs.root() == rhs.root());
+}
+
+template < typename TNode, typename T, typename UNode, typename U >
+bool	operator!=(const MapIterator<TNode, T>& lhs, const MapIterator<UNode, U> rhs)
+{
+	return (lhs.root() != rhs.root());
 }
 
 }

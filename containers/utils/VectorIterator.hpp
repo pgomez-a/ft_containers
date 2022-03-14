@@ -31,6 +31,7 @@ class	VectorIterator
 		template < typename U >
 		VectorIterator(const VectorIterator<U>& other) : _ptr_it(other.base()) {}
 
+		/** Destructor **/
 		~VectorIterator(void) {}
 
 		/** Assignation Operator **/
