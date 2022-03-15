@@ -18,7 +18,7 @@ class map
 {
 	private:
 		/** Member Type **/
-		typedef Bst<Key, T, Compare, Alloc>				BTree;
+		typedef Bst<ft::pair<Key, T>, Compare, Alloc>			BTree;
 	public:
 		/** Member Types **/
 		typedef Key							key_type;
@@ -31,7 +31,7 @@ class map
 		typedef typename Alloc::pointer					pointer;
 		typedef typename Alloc::const_pointer				const_pointer;
 		typedef MapIterator<BTree*, value_type>				iterator;
-		typedef MapIterator<BTree*, const value_type>			const_iterator;
+		typedef MapIterator<const BTree*, const value_type>		const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
 		typedef std::size_t						size_type;
@@ -104,7 +104,7 @@ class map
 
 		map(const map& other)
 		{
-			iterator	first(other.begin());
+			const_iterator	first(other.begin());
 
 			this->_root = nullptr;
 			this->_end = nullptr;
@@ -133,7 +133,7 @@ class map
 		/** Assignation Operator **/
 		map&	operator=(const map& other)
 		{
-			iterator	first(other.begin());
+			const_iterator	first(other.begin());
 
 			if (this != &other)
 			{

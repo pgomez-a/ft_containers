@@ -5,23 +5,20 @@
 # include "utils.hpp"
 # include "pair.hpp"
 
-template < typename Key, typename T, typename Compare = std::less<Key>,
-	typename Alloc = std::allocator<ft::pair<Key, T> > >
+template < typename T, typename Compare, typename Alloc >
 class	Bst
 {
 	public:
 		/** Member Types **/
-		typedef Key								key_type;
-		typedef T								mapped_type;
-		typedef ft::pair<Key, T>						value_type;
-		typedef Compare								key_compare;
-		typedef typename Alloc::template rebind<Bst>::other			allocator_type;
-		typedef typename Alloc::reference					reference;
-		typedef typename Alloc::const_reference					const_reference;
-		typedef typename Alloc::pointer						pointer;
-		typedef typename Alloc::const_pointer					const_pointer;
-		typedef std::size_t							size_type;
-		typedef std::ptrdiff_t							difference_type;
+		typedef T						value_type;
+		typedef Compare						key_compare;
+		typedef typename Alloc::template rebind<Bst>::other	allocator_type;
+		typedef typename Alloc::reference			reference;
+		typedef typename Alloc::const_reference			const_reference;
+		typedef typename Alloc::pointer				pointer;
+		typedef typename Alloc::const_pointer			const_pointer;
+		typedef std::size_t					size_type;
+		typedef std::ptrdiff_t					difference_type;
 
 		/** Member Attributes **/
 		value_type	data;
@@ -41,21 +38,23 @@ class	Bst
 			const key_compare& comp = key_compare(),
 			const allocator_type& alloc = allocator_type()) : data(d)
 		{
-			this->left = nullptr;
-			this->right = nullptr;
-			this->parent = nullptr;
-			this->balance = 0;
+			this->left = 0;
+			this->right = 0;
+			this->parent = 0;
+		//	this->balance = 0;
 			this->_comp = comp;
 			this->_alloc = alloc;
 			return ;
 		}
 
-		Bst&	operator=(const Bst& other)
+		//template < typename K, typename U, typename C, typename A >
+		Bst&	operator=(const Bst other)
 		{
 			this->data = other.data;
 			this->left = other.left;
 			this->right = other.right;
 			this->parent = other.parent;
+			//this->balance = other.balance();
 			this->_comp = other.key_comp();
 			this->_alloc = other.get_allocator();
 			return (*this);
@@ -82,7 +81,7 @@ class	Bst
 
 		Bst*	search(Bst* root, value_type data) const
 		{
-			if (root == nullptr || root->data.first == data.first)
+			if (!root || root->data.first == data.first)
 				return (root);
 			if (this->_comp(root->data.first, data.first))
 				return (search(root->right, data));
@@ -91,11 +90,11 @@ class	Bst
 
 		Bst*&	insert(Bst*& root, value_type data)
 		{
-			int	next_bal;
+			//int	next_bal;
 			Bst*	tmp;
 
-			next_bal = -999;
-			if (root == nullptr)
+			//next_bal = -999;
+			if (!root)
 			{
 				tmp = this->_alloc.allocate(1);
 				this->_alloc.construct(tmp, Bst(data));
@@ -104,27 +103,27 @@ class	Bst
 			}
 			if (this->_comp(data.first, root->data.first))
 			{
-				if (root->left != nullptr)
-					next_bal = root->left->balance;
+			//	if (root->left != nullptr)
+			//		next_bal = root->left->balance;
 				tmp = insert(root->left, data);
 				root->left = tmp;
 				tmp->parent = root;
-				if (!((next_bal <= root->left->balance && root->left->balance < 0)
-					|| (0 < root->left->balance && root->left->balance <= next_bal)
-					|| (root->left->balance == 0 && root->left->data.first != data.first)))
-					root->balance -= 1;
+			//	if (!((next_bal <= root->left->balance && root->left->balance < 0)
+			//		|| (0 < root->left->balance && root->left->balance <= next_bal)
+			//		|| (root->left->balance == 0 && root->left->data.first != data.first)))
+			//		root->balance -= 1;
 			}
 			else if (data.first != root->data.first)
 			{
-				if (root->right != nullptr)
-					next_bal = root->right->balance;
+			//	if (root->right != nullptr)
+			//		next_bal = root->right->balance;
 				tmp = insert(root->right, data);
 				root->right = tmp;
 				tmp->parent = root;
-				if (!((next_bal <= root->right->balance && root->right->balance < 0)
-					|| (0 < root->right->balance && root->right->balance <= next_bal)
-					|| (root->right->balance == 0 && root->right->data.first != data.first)))
-					root->balance += 1;
+			//	if (!((next_bal <= root->right->balance && root->right->balance < 0)
+			//		|| (0 < root->right->balance && root->right->balance <= next_bal)
+			//		|| (root->right->balance == 0 && root->right->data.first != data.first)))
+			//		root->balance += 1;
 			}
 			//return (this->rebalance(root));
 			return (root);
@@ -132,57 +131,57 @@ class	Bst
 
 		Bst*	deleteNode(Bst* root, value_type data)
 		{
-			int	next_bal;
+			//int	next_bal;
 			Bst*	tmp;
 
-			next_bal = -999;
-			if (root == nullptr)
+			//next_bal = -999;
+			if (!root)
 				return (root);
 			if (this->_comp(root->data.first, data.first))
 			{
-				if (root->right != nullptr)
-					next_bal = root->right->balance;
+			//	if (root->right != nullptr)
+			//		next_bal = root->right->balance;
 				root->right = deleteNode(root->right, data);
-				if ((root->right == nullptr && next_bal != -999)
-					|| (next_bal < root->right->balance && root->right->balance <= 0)
-					|| (0 <= root->right->balance && root->right->balance < next_bal))
-					root->balance -= 1;
-				//return (this->rebalance(root));
+			//	if ((root->right == nullptr && next_bal != -999)
+			//		|| (next_bal < root->right->balance && root->right->balance <= 0)
+			//		|| (0 <= root->right->balance && root->right->balance < next_bal))
+			//		root->balance -= 1;
+			//	return (this->rebalance(root));
 				return (root);
 			}
 			else if (root->data.first != data.first)
 			{
-				if (root->left != nullptr)
-					next_bal = root->left->balance;
+			//	if (root->left != nullptr)
+			//		next_bal = root->left->balance;
 				root->left = deleteNode(root->left, data);
-				if ((root->left == nullptr && next_bal != -999)
-					|| (next_bal < root->left->balance && root->left->balance <= 0)
-					|| (0 <= root->left->balance && root->left->balance < next_bal))
-					root->balance += 1;
-				//return (this->rebalance(root));
+			//	if ((root->left == nullptr && next_bal != -999)
+			//		|| (next_bal < root->left->balance && root->left->balance <= 0)
+			//		|| (0 <= root->left->balance && root->left->balance < next_bal))
+			//		root->balance += 1;
+			//	return (this->rebalance(root));
 				return (root);
 			}
-			if (root->left == nullptr)
+			if (!root->left)
 			{
 				tmp = root->right;
-				if (tmp != nullptr)
+				if (tmp)
 					tmp->parent = root->parent;
-				if (root->parent != nullptr && root->parent->left == root)
+				if (root->parent && root->parent->left == root)
 					root->parent->left = tmp;
-				else if (root->parent != nullptr)
+				else if (root->parent)
 					root->parent->right = tmp;
 				this->_alloc.destroy(root);
 				this->_alloc.deallocate(root, 1);
 				return (tmp);
 			}
-			else if (root->right == nullptr)
+			else if (!root->right)
 			{
 				tmp = root->left;
-				if (tmp != nullptr)
+				if (tmp)
 					tmp->parent = root->parent;
-				if (root->parent != nullptr && root->parent->left == root)
+				if (root->parent && root->parent->left == root)
 					root->parent->left = tmp;
-				else if (root->parent != nullptr)
+				else if (root->parent)
 					root->parent->right = tmp;
 				this->_alloc.destroy(root);
 				this->_alloc.deallocate(root, 1);
@@ -193,10 +192,10 @@ class	Bst
 				Bst*	parent;
 				Bst*	succ;
 
-				root->balance -= 1;
+				//root->balance -= 1;
 				parent = root;
 				succ = root->right;
-				while (succ->left != nullptr)
+				while (succ->left)
 				{
 					parent = succ;
 					succ = succ->left;
@@ -214,6 +213,7 @@ class	Bst
 			}
 		}
 
+		/**
 		Bst*&	rebalance(Bst*& root)
 		{
 			if (root->balance == -2 && root->left != nullptr && root->left->balance == -1)
@@ -322,10 +322,11 @@ class	Bst
 			tmp->parent = root->right;
 			return (this->rotateLeft(mode, root));
 		}
+		**/
 
 		void	inorder(Bst* root)
 		{
-			if (root == nullptr)
+			if (!root)
 				return ;
 			inorder(root->left);
 			std::cout << "(" << root->data.first << ") -> " << root->balance << std::endl;
@@ -335,7 +336,7 @@ class	Bst
 
 		void	preorder(Bst* root)
 		{
-			if (root == nullptr)
+			if (!root)
 				return ;
 			std::cout << "(" << root->data.first << ") -> " << root->balance << std::endl;
 			preorder(root->left);
@@ -345,7 +346,7 @@ class	Bst
 
 		void	postorder(Bst* root)
 		{
-			if (root == nullptr)
+			if (!root)
 				return ;
 			postorder(root->left);
 			postorder(root->right);
@@ -355,17 +356,17 @@ class	Bst
 
 		void	clean(Bst** root)
 		{
-			if (*root == nullptr)
+			if (!(*root))
 				return ;
-			if ((*root)->left != nullptr)
+			if ((*root)->left)
 				clean(&((*root)->left));
-			if ((*root)->right != nullptr)
+			if ((*root)->right)
 				clean(&((*root)->right));
-			(*root)->left = nullptr;
-			(*root)->right = nullptr;
+			(*root)->left = 0;
+			(*root)->right = 0;
 			this->_alloc.destroy(*root);
 			this->_alloc.deallocate(*root, 1);
-			*root = nullptr;
+			*root = 0;
 			return ;
 		}
 };

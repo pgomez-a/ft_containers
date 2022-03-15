@@ -57,8 +57,8 @@ class MapIterator
 
 		template < typename UNode, typename U >
 		MapIterator(const MapIterator<UNode, U>& other)
+			: _node(other.root()), _beg(other.begin()), _end(other.end())
 		{
-			*this = other;
 			return ;
 		}
 
@@ -66,8 +66,7 @@ class MapIterator
 		~MapIterator(void) {}
 
 		/** Assignation Operator **/
-		template < typename UNode, typename U >
-		MapIterator&		operator=(const MapIterator<UNode, U>& other)
+		MapIterator&		operator=(const MapIterator& other)
 		{
 			this->_node = other.root();
 			this->_beg = other.begin();
