@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   MapIterator.hpp                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pgomez-a <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/17 11:25:25 by pgomez-a          #+#    #+#             */
+/*   Updated: 2022/03/17 11:56:34 by pgomez-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAP_ITERATOR_HPP
 # define MAP_ITERATOR_HPP
 
@@ -14,14 +26,14 @@ class MapIterator
 {
 	public:
 		/** Member Types **/
-		typedef std::bidirectional_iterator_tag				iterator_category;
+		typedef std::bidirectional_iterator_tag						iterator_category;
 		typedef typename ft::iterator_traits<Node>::value_type		node;
 		typedef typename ft::iterator_traits<Node>::difference_type	difference_type;
-		typedef typename ft::iterator_traits<Node>::pointer		nodePtr;
+		typedef typename ft::iterator_traits<Node>::pointer			nodePtr;
 		typedef typename ft::iterator_traits<Node>::reference		nodeRef;
-		typedef T							value_type;
-		typedef T*							pointer;
-		typedef T&							reference;
+		typedef T													value_type;
+		typedef T*													pointer;
+		typedef T&													reference;
 
 	private:
 		/** Private Member Attributes **/
@@ -31,26 +43,26 @@ class MapIterator
 
 	public:
 		/** Constructors **/
-		MapIterator(nodePtr node = nullptr) : _node(node)
+		MapIterator(nodePtr node = 0) : _node(node)
 		{
 			nodePtr	tmp(node);
 
-			if (node != nullptr && (tmp != nullptr || tmp == this->_end))
+			if (node && (tmp || tmp == this->_end))
 			{
-				while (tmp->parent != nullptr && tmp->parent->parent != nullptr)
+				while (tmp->parent && tmp->parent->parent)
 					tmp = tmp->parent;
-				while (tmp->left != nullptr)
+				while (tmp->left)
 					tmp = tmp->left;
 				this->_beg = tmp;
 				tmp = node;
-				while (tmp->parent != nullptr)
+				while (tmp->parent)
 					tmp = tmp->parent;
 				this->_end = tmp;
 			}
 			else
 			{
-				this->_beg = nullptr;
-				this->_end = nullptr;
+				this->_beg = 0;
+				this->_end = 0;
 			}
 			return ;
 		}
@@ -66,7 +78,7 @@ class MapIterator
 		~MapIterator(void) {}
 
 		/** Assignation Operator **/
-		MapIterator&		operator=(const MapIterator& other)
+		MapIterator&	operator=(const MapIterator& other)
 		{
 			this->_node = other.root();
 			this->_beg = other.begin();
@@ -91,12 +103,12 @@ class MapIterator
 		}
 
 		/** Member Functions **/
-		reference	operator*(void) const
+		reference		operator*(void) const
 		{
 			return (this->_node->data);
 		}
 
-		pointer		operator->(void) const
+		pointer			operator->(void) const
 		{
 			return (&(this->_node->data));
 		}
@@ -106,15 +118,15 @@ class MapIterator
 			nodePtr	output;
 
 			output = this->_node;
-			if (output != nullptr && output->right != nullptr)
+			if (output && output->right)
 			{
 				output = output->right;
-				while (output->left != nullptr)
+				while (output->left)
 					output = output->left;
 			}
 			else if (output != this->_end)
 			{
-				while (output->parent != nullptr && output != output->parent->left)
+				while (output->parent && output != output->parent->left)
 					output = output->parent;
 				output = output->parent;
 			}
@@ -122,7 +134,7 @@ class MapIterator
 			return (*this);
 		}
 
-		MapIterator	operator++(int)
+		MapIterator		operator++(int)
 		{
 			MapIterator	output(*this);
 
@@ -135,15 +147,15 @@ class MapIterator
 			nodePtr	output;
 
 			output = this->_node;
-			if (output->left != nullptr)
+			if (output->left)
 			{
 				output = output->left;
-				while (output->right != nullptr)
+				while (output->right)
 					output = output->right;
 			}
 			else if (output != this->_beg)
 			{
-				while (output->parent != nullptr && output != output->parent->right)
+				while (output->parent && output != output->parent->right)
 					output = output->parent;
 				output = output->parent;
 			}
@@ -151,7 +163,7 @@ class MapIterator
 			return (*this);
 		}
 
-		MapIterator	operator--(int)
+		MapIterator		operator--(int)
 		{
 			MapIterator	output(*this);
 

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   vector.hpp                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pgomez-a <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/17 11:17:23 by pgomez-a          #+#    #+#             */
+/*   Updated: 2022/03/17 11:54:35 by pgomez-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
@@ -14,25 +26,25 @@ class	vector
 {
 	public:
 		/** Member Types **/
-		typedef T 					value_type;
-		typedef Allocator				allocator_type;
-		typedef typename Allocator::reference		reference;
-		typedef typename Allocator::const_reference	const_reference;
-		typedef typename Allocator::pointer		pointer;
-		typedef typename Allocator::const_pointer	const_pointer;
-		typedef VectorIterator<pointer>			iterator;
-		typedef VectorIterator<const_pointer>		const_iterator;
-		typedef ft::reverse_iterator<iterator>		reverse_iterator;
+		typedef T 										value_type;
+		typedef Allocator								allocator_type;
+		typedef typename Allocator::reference			reference;
+		typedef typename Allocator::const_reference		const_reference;
+		typedef typename Allocator::pointer				pointer;
+		typedef typename Allocator::const_pointer		const_pointer;
+		typedef VectorIterator<pointer>					iterator;
+		typedef VectorIterator<const_pointer>			const_iterator;
+		typedef ft::reverse_iterator<iterator>			reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>	const_reverse_iterator;
-		typedef std::ptrdiff_t				difference_type;
-		typedef std::size_t				size_type;
+		typedef std::ptrdiff_t							difference_type;
+		typedef std::size_t								size_type;
 
 	private:
 		/** Member Attributes **/
-		size_type	_size;
-		size_type	_capacity;
+		size_type		_size;
+		size_type		_capacity;
 		allocator_type	_allocator;
-		pointer		_vector_ptr;
+		pointer			_vector_ptr;
 	
 	public:
 		/** Constructors **/
@@ -41,7 +53,7 @@ class	vector
 			this->_size = 0;
 			this->_capacity = 0;
 			this->_allocator = alloc;
-			this->_vector_ptr = nullptr;
+			this->_vector_ptr = 0;
 			return ;
 		}
 
@@ -52,7 +64,7 @@ class	vector
 			this->_size = 0;
 			this->_capacity = 0;
 			this->_allocator = alloc;
-			this->_vector_ptr = nullptr;
+			this->_vector_ptr = 0;
 			this->assign(count, value);
 			return ;
 		}
@@ -65,7 +77,7 @@ class	vector
 			this->_size = 0;
 			this->_capacity = 0;
 			this->_allocator = alloc;
-			this->_vector_ptr = nullptr;
+			this->_vector_ptr = 0;
 			this->assign(first, last);
 			return ;
 		}
@@ -77,7 +89,7 @@ class	vector
 				this->_size = 0;
 				this->_capacity = 0;
 				this->_allocator = other._allocator;
-				this->_vector_ptr = nullptr;
+				this->_vector_ptr = 0;
 				this->assign(other.begin(), other.end());
 			}
 			return ;
@@ -101,27 +113,27 @@ class	vector
 		}
 
 		/** Iterators **/
-		iterator		begin(void)
+		iterator				begin(void)
 		{
 			return (iterator(this->_vector_ptr));
 		}
 
-		const_iterator		begin(void) const
+		const_iterator			begin(void) const
 		{
 			return (const_iterator(this->_vector_ptr));
 		}
 
-		iterator		end(void)
+		iterator				end(void)
 		{
 			return (iterator(this->_vector_ptr + this->_size));
 		}
 
-		const_iterator		end(void) const
+		const_iterator			end(void) const
 		{
 			return (const_iterator(this->_vector_ptr + this->_size));
 		}
 
-		reverse_iterator	rbegin(void)
+		reverse_iterator		rbegin(void)
 		{
 			return (reverse_iterator(this->_vector_ptr + this->_size));
 		}
@@ -131,7 +143,7 @@ class	vector
 			return (const_reverse_iterator(this->_vector_ptr + this->_size));
 		}
 
-		reverse_iterator	rend(void)
+		reverse_iterator		rend(void)
 		{
 			return (reverse_iterator(this->_vector_ptr));
 		}
@@ -142,22 +154,22 @@ class	vector
 		}
 
 		/** Capacity **/
-		size_type		size(void) const
+		size_type	size(void) const
 		{
 			return (this->_size);
 		}
 
-		size_type		max_size(void) const
+		size_type	max_size(void) const
 		{
 			return (this->_allocator.max_size());
 		}
 
-		size_type		capacity(void) const
+		size_type	capacity(void) const
 		{
 			return (this->_capacity);
 		}
 
-		void			resize(size_type count, value_type value = value_type())
+		void		resize(size_type count, value_type value = value_type())
 		{
 			iterator	begin;
 			iterator	end;
@@ -206,7 +218,7 @@ class	vector
 			return ;
 		}
 
-		void			reserve(size_type new_cap)
+		void		reserve(size_type new_cap)
 		{
 			iterator	begin;
 			iterator	end;
@@ -233,7 +245,7 @@ class	vector
 			return ;
 		}
 
-		bool			empty(void) const
+		bool		empty(void) const
 		{
 			return (this->_size == 0);
 		}
@@ -244,7 +256,7 @@ class	vector
 			return (*(this->_vector_ptr + pos));
 		}
 
-		const_reference		operator[](size_type pos) const
+		const_reference	operator[](size_type pos) const
 		{
 			return (*(this->_vector_ptr + pos));
 		}
@@ -256,7 +268,7 @@ class	vector
 			return (*(this->_vector_ptr + pos));
 		}
 
-		const_reference		at(size_type pos) const
+		const_reference	at(size_type pos) const
 		{
 			if (pos >= this->_size)
 				throw std::out_of_range("out of range");
@@ -268,7 +280,7 @@ class	vector
 			return (*(this->_vector_ptr));
 		}
 
-		const_reference		front(void) const
+		const_reference	front(void) const
 		{
 			return (*(this->_vector_ptr));
 		}
@@ -278,7 +290,7 @@ class	vector
 			return (*(this->_vector_ptr + this->_size - 1));
 		}
 
-		const_reference		back(void) const
+		const_reference	back(void) const
 		{
 			return (*(this->_vector_ptr + this->_size - 1));
 		}
@@ -304,7 +316,7 @@ class	vector
 
 		template < typename InputIt >
 		void			assign(InputIt first, InputIt last,
-					typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
+				typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 		{
 			size_type	capacity;
 			pointer		modify_ptr;
@@ -354,8 +366,8 @@ class	vector
 		iterator		insert(iterator pos, const_reference value)
 		{
 			difference_type	diff;
-			iterator	end;
-			pointer		modify_ptr;
+			iterator		end;
+			pointer			modify_ptr;
 			
 
 			diff = pos - this->begin();
@@ -378,8 +390,8 @@ class	vector
 		iterator		insert(iterator pos, size_type count, const_reference value)
 		{
 			difference_type	diff;
-			iterator	end;
-			pointer		modify_ptr;
+			iterator		end;
+			pointer			modify_ptr;
 
 			diff = pos - this->begin();
 			if (this->_size + count > this->_capacity)
@@ -405,13 +417,13 @@ class	vector
 
 		template < typename InputIt >
 		iterator		insert(iterator pos, InputIt first, InputIt last,
-					typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
+				typename ft::enable_if<!ft::is_integral<InputIt>::value>::type* = 0)
 		{
 			difference_type	diff;
 			difference_type	count;
-			iterator	end;
-			pointer		modify_ptr;
-			InputIt		tmp_first;
+			iterator		end;
+			pointer			modify_ptr;
+			InputIt			tmp_first;
 
 			count = 0;
 			tmp_first = first;
@@ -445,8 +457,8 @@ class	vector
 		iterator		erase(iterator pos)
 		{
 			difference_type	diff;
-			iterator	end;
-			pointer		modify_ptr;
+			iterator		end;
+			pointer			modify_ptr;
 
 			diff = pos - this->begin();
 			end = this->end() - 1;
@@ -466,8 +478,8 @@ class	vector
 		{
 			difference_type	count;
 			difference_type	diff;
-			iterator	begin;
-			pointer		modify_ptr;
+			iterator		begin;
+			pointer			modify_ptr;
 
 			count = last - first;
 			diff = this->end() - last;
@@ -492,9 +504,9 @@ class	vector
 
 		void			swap(vector& other)
 		{
-			pointer		tmp_ptr;
-			size_type	tmp_siz;
-			size_type	tmp_cap;
+			pointer			tmp_ptr;
+			size_type		tmp_siz;
+			size_type		tmp_cap;
 			allocator_type	tmp_alc;
 
 			tmp_ptr = other._vector_ptr;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   stack.hpp                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pgomez-a <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/17 11:16:49 by pgomez-a          #+#    #+#             */
+/*   Updated: 2022/03/17 11:17:20 by pgomez-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef STACK_HPP
 # define STACK_HPP
 
@@ -16,7 +28,7 @@ class	stack
 		/** Member Types **/
 		typedef typename Container::value_type	value_type;
 		typedef typename Container::size_type	size_type;
-		typedef Container			container_type;
+		typedef Container						container_type;
 
 	protected:
 		container_type	_ctnr;

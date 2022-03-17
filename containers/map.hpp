@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pgomez-a <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/17 11:11:17 by pgomez-a          #+#    #+#             */
+/*   Updated: 2022/03/17 12:05:56 by pgomez-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef MAP_HPP
 # define MAP_HPP
 
@@ -13,29 +25,29 @@ namespace ft
 {
 
 template < typename Key, typename T, typename Compare = std::less<Key>,
-	 typename Alloc = std::allocator<ft::pair<Key, T> > >
+	 typename Alloc = std::allocator<ft::pair<const Key, T> > >
 class map
 {
 	private:
 		/** Member Type **/
-		typedef Bst<ft::pair<Key, T>, Compare, Alloc>			BTree;
+		typedef Bst<ft::pair<Key, T>, Compare, Alloc>	BTree;
 	public:
 		/** Member Types **/
-		typedef Key							key_type;
-		typedef T							mapped_type;
-		typedef ft::pair<Key, T>					value_type;
-		typedef Compare							key_compare;
-		typedef Alloc							allocator_type;
-		typedef typename Alloc::reference				reference;
+		typedef Key											key_type;
+		typedef T											mapped_type;
+		typedef ft::pair<Key, T>							value_type;
+		typedef Compare										key_compare;
+		typedef Alloc										allocator_type;
+		typedef typename Alloc::reference					reference;
 		typedef typename Alloc::const_reference				const_reference;
-		typedef typename Alloc::pointer					pointer;
+		typedef typename Alloc::pointer						pointer;
 		typedef typename Alloc::const_pointer				const_pointer;
 		typedef MapIterator<BTree*, value_type>				iterator;
-		typedef MapIterator<const BTree*, const value_type>		const_iterator;
+		typedef MapIterator<const BTree*, const value_type>	const_iterator;
 		typedef ft::reverse_iterator<iterator>				reverse_iterator;
-		typedef ft::reverse_iterator<const_iterator>			const_reverse_iterator;
-		typedef std::size_t						size_type;
-		typedef std::ptrdiff_t						difference_type;
+		typedef ft::reverse_iterator<const_iterator>		const_reverse_iterator;
+		typedef std::size_t									size_type;
+		typedef std::ptrdiff_t								difference_type;
 
 		/** Member Class **/
 		class value_compare
@@ -63,11 +75,11 @@ class map
 		};
 
 		/** Member Attributes **/
-		BTree		_Tree;
-		BTree*		_root;
-		BTree*		_end;
-		size_type	_size;
-		key_compare	_comp;
+		BTree			_Tree;
+		BTree*			_root;
+		BTree*			_end;
+		size_type		_size;
+		key_compare		_comp;
 		allocator_type	_alloc;
 
 	public:
@@ -75,8 +87,8 @@ class map
 		explicit map(const key_compare& comp = key_compare(),
 			const allocator_type& alloc = allocator_type())
 		{
-			this->_root = nullptr;
-			this->_end = nullptr;
+			this->_root = 0;
+			this->_end = 0;
 			this->_end = this->_Tree.insert(this->_end, value_type());
 			this->_size = 0;
 			this->_comp = comp;
@@ -88,8 +100,8 @@ class map
 		map(InputIt first, InputIt last, const key_compare& comp = key_compare(),
 			const allocator_type& alloc = allocator_type())
 		{
-			this->_root = nullptr;
-			this->_end = nullptr;
+			this->_root = 0;
+			this->_end = 0;
 			this->_end = this->_Tree.insert(this->_end, value_type());
 			this->_size = 0;
 			this->_comp = comp;
@@ -106,8 +118,8 @@ class map
 		{
 			const_iterator	first(other.begin());
 
-			this->_root = nullptr;
-			this->_end = nullptr;
+			this->_root = 0;
+			this->_end = 0;
 			this->_end = this->_Tree.insert(this->_end, value_type());
 			this->_size = 0;
 			this->_comp = other._comp;
@@ -139,7 +151,7 @@ class map
 			{
 				if (this->_size > 0)
 					this->_Tree.clean(&(this->_root));
-				this->_end->left = nullptr;
+				this->_end->left = 0;
 				this->_size = 0;
 				this->_comp = other._comp;
 				this->_alloc = other._alloc;
@@ -235,7 +247,7 @@ class map
 			BTree*	comp;
 
 			comp = this->_Tree.search(this->_root, ft::pair<key_type, mapped_type>(k, mapped_type()));
-			if (comp == nullptr)
+			if (!comp)
 				throw std::out_of_range("out of range");
 			return ((*((this->insert(ft::pair<key_type, mapped_type>(k,mapped_type()))).first)).second);
 		}
@@ -245,7 +257,7 @@ class map
 			BTree*	comp;
 
 			comp = this->_Tree.search(this->_root, ft::pair<key_type, mapped_type>(k, mapped_type()));
-			if (comp == nullptr)
+			if (!comp)
 				throw std::out_of_range("out of range");
 			return ((*((this->insert(ft::pair<key_type, mapped_type>(k,mapped_type()))).first)).second);
 		}
@@ -255,14 +267,14 @@ class map
 		{
 			BTree*	comp;
 
-			comp = nullptr;
+			comp = 0;
 			if (this->_size > 0)
 				comp = this->_Tree.search(this->_root, val);
-			if (comp != nullptr)
+			if (comp)
 				return (ft::pair<iterator, bool>(iterator(comp), false));
 			this->_size += 1;
 			this->_root = this->_Tree.insert(this->_root, val);
-			while (this->_root->parent != nullptr && this->_root->parent->parent != nullptr)
+			while (this->_root->parent && this->_root->parent->parent)
 				this->_root = this->_root->parent;
 			if (this->_size == 1)
 			{
@@ -273,17 +285,17 @@ class map
 			return (ft::pair<iterator, bool>(iterator(comp), true));
 		}
 
-		iterator			insert(iterator position, const value_type& val)
+		iterator					insert(iterator position, const value_type& val)
 		{
 			BTree*	comp;
 
 			(void)position;
 			comp = this->_Tree.search(this->_root, val);
-			if (comp == nullptr)
+			if (!comp)
 			{
 				this->_size += 1;
 				this->_root = this->_Tree.insert(this->_root, val);
-				while (this->_root->parent != nullptr && this->_root->parent->parent != nullptr)
+				while (this->_root->parent && this->_root->parent->parent)
 					this->_root = this->_root->parent;
 				comp = this->_Tree.search(this->_root, val);
 				if (this->_size == 1)
@@ -296,7 +308,7 @@ class map
 		}
 
 		template < typename InputIt >
-		void				insert(InputIt first, InputIt last)
+		void						insert(InputIt first, InputIt last)
 		{
 			BTree*		comp;
 			size_type	init;
@@ -305,11 +317,11 @@ class map
 			while (first != last)
 			{
 				comp = this->_Tree.search(this->_root, *first);
-				if (comp == nullptr)
+				if (!comp)
 				{
 					this->_size += 1;
 					this->_root = this->_Tree.insert(this->_root, *first);
-					while (this->_root->parent != nullptr && this->_root->parent->parent != nullptr)
+					while (this->_root->parent && this->_root->parent->parent)
 						this->_root = this->_root->parent;
 				}
 				first++;
@@ -322,21 +334,21 @@ class map
 			return ;
 		}
 
-		size_type			erase(const key_type& k)
+		size_type					erase(const key_type& k)
 		{
 			BTree*	comp;
 
 			if (this->_size > 0)
 			{
 				comp = this->_Tree.search(this->_root, value_type(k, mapped_type()));
-				if (comp == nullptr)
+				if (!comp)
 					return (0);
 				this->_root = this->_Tree.deleteNode(this->_root, value_type(k, mapped_type()));
-				while (this->_root && this->_root->parent != nullptr && this->_root->parent->parent != nullptr)
+				while (this->_root && this->_root->parent && this->_root->parent->parent)
 					this->_root = this->_root->parent;
 				this->_size -= 1;
 				if (this->_size == 0)
-					this->_end->left = nullptr;
+					this->_end->left = 0;
 				else
 				{
 					this->_end->left = this->_root;
@@ -347,16 +359,16 @@ class map
 			return (0);
 		}
 
-		void				erase(iterator position)
+		void						erase(iterator position)
 		{
 			this->erase(position->first);
 			return ;
 		}
 
-		void				erase(iterator first, iterator last)
+		void						erase(iterator first, iterator last)
 		{
-			int		len;
-			int		count;
+			int			len;
+			int			count;
 			iterator	ite;
 			
 			ite = first;
@@ -383,12 +395,12 @@ class map
 			return ;
 		}
 
-		void				swap(map& x)
+		void						swap(map& x)
 		{
-			BTree*		tmp_rot;
-			BTree*		tmp_end;
-			size_type	tmp_siz;
-			key_compare	tmp_cmp;
+			BTree*			tmp_rot;
+			BTree*			tmp_end;
+			size_type		tmp_siz;
+			key_compare		tmp_cmp;
 			allocator_type	tmp_alc;
 
 			tmp_rot = x._root;
@@ -409,18 +421,18 @@ class map
 			return ;
 		}
 
-		void				clear(void)
+		void						clear(void)
 		{
 			if (this->_size > 0)
 				this->_Tree.clean(&(this->_root));
-			this->_end->left = nullptr;
-			this->_root = nullptr;
+			this->_end->left = 0;
+			this->_root = 0;
 			this->_size = 0;
 			return ;
 		}
 
 		/** Observers **/
-		key_compare	key_comp(void) const
+		key_compare		key_comp(void) const
 		{
 			return (this->_comp);
 		}
@@ -431,35 +443,35 @@ class map
 		}
 
 		/** Operations **/
-		iterator					find(const key_type& k)
+		iterator		find(const key_type& k)
 		{
 			iterator	output(this->_Tree.search(this->_root, value_type(k, mapped_type())));
 
-			if (output.root() == nullptr)
+			if (!output.root())
 				return (this->end());
 			return (output);
 		}
 
-		const_iterator					find(const key_type& k) const
+		const_iterator	find(const key_type& k) const
 		{
 			const_iterator	output(this->_Tree.search(this->_root, value_type(k, mapped_type())));
 
-			if (output.root() == nullptr)
+			if (!output.root())
 				return (this->end());
 			return (output);
 		}
 
-		size_type					count(const key_type& k) const
+		size_type		count(const key_type& k) const
 		{
 			BTree*	comp;
 
 			comp = this->_Tree.search(this->_root, value_type(k, mapped_type()));
-			if (comp == nullptr)
+			if (!comp)
 				return (0);
 			return (1);
 		}
 
-		iterator					lower_bound(const key_type& k)
+		iterator		lower_bound(const key_type& k)
 		{
 			iterator	beg(this->begin());
 
@@ -472,7 +484,7 @@ class map
 			return (beg);
 		}
 
-		const_iterator					lower_bound(const key_type& k) const
+		const_iterator	lower_bound(const key_type& k) const
 		{
 			const_iterator	beg(this->begin());
 
@@ -485,7 +497,7 @@ class map
 			return (beg);
 		}
 
-		iterator					upper_bound(const key_type& k)
+		iterator		upper_bound(const key_type& k)
 		{
 			iterator	beg(this->begin());
 
@@ -498,7 +510,7 @@ class map
 			return (beg);
 		}
 
-		const_iterator					upper_bound(const key_type& k) const
+		const_iterator	upper_bound(const key_type& k) const
 		{
 			const_iterator	beg(this->begin());
 
@@ -511,7 +523,7 @@ class map
 			return (beg);
 		}
 
-		ft::pair<iterator, iterator>			equal_range(const key_type& k)
+		ft::pair<iterator, iterator>				equal_range(const key_type& k)
 		{
 			return (ft::pair<iterator, iterator>(this->lower_bound(k), this->upper_bound(k)));
 		}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   VectorIterator.hpp                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pgomez-a <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/17 11:26:43 by pgomez-a          #+#    #+#             */
+/*   Updated: 2022/03/17 11:56:49 by pgomez-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef VECTOR_ITERATOR_HPP
 # define VECTOR_ITERATOR_HPP
 
@@ -14,10 +26,10 @@ class	VectorIterator
 	public:
 		/** Member Types **/
 		typedef typename ft::iterator_traits<T>::iterator_category	iterator_category;
-		typedef typename ft::iterator_traits<T>::value_type		value_type;
+		typedef typename ft::iterator_traits<T>::value_type			value_type;
 		typedef typename ft::iterator_traits<T>::difference_type	difference_type;
-		typedef typename ft::iterator_traits<T>::pointer		pointer;
-		typedef typename ft::iterator_traits<T>::reference		reference;
+		typedef typename ft::iterator_traits<T>::pointer			pointer;
+		typedef typename ft::iterator_traits<T>::reference			reference;
 
 	private:
 		/** Member Attributes **/
@@ -25,7 +37,7 @@ class	VectorIterator
 
 	public:
 		/** Constructors **/
-		VectorIterator(void) : _ptr_it(nullptr) {}
+		VectorIterator(void) : _ptr_it(0) {}
 		VectorIterator(pointer ptr_it) : _ptr_it(ptr_it) {}
 
 		template < typename U >
@@ -36,7 +48,7 @@ class	VectorIterator
 
 		/** Assignation Operator **/
 		template < typename U >
-		VectorIterator&		operator=(const VectorIterator<U>& other)
+		VectorIterator&	operator=(const VectorIterator<U>& other)
 		{
 			this->_ptr_it = other.base();
 			return (*this);
@@ -49,17 +61,17 @@ class	VectorIterator
 		}
 
 		/** Member Functions **/
-		reference	operator*(void) const
+		reference		operator*(void) const
 		{
 			return (*this->_ptr_it);
 		}
 
-		reference	operator[](difference_type n)
+		reference		operator[](difference_type n)
 		{
 			return (*(this->_ptr_it + n));
 		}
 
-		pointer		operator->(void) const
+		pointer			operator->(void) const
 		{
 			return (this->_ptr_it);
 		}

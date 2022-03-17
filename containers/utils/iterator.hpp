@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   iterator.hpp                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pgomez-a <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/17 11:28:21 by pgomez-a          #+#    #+#             */
+/*   Updated: 2022/03/17 11:56:56 by pgomez-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ITERATOR_HPP
 # define ITERATOR_HPP
 
@@ -9,9 +21,9 @@ struct iterator_traits
 {
 	public:
 		typedef typename Iter::difference_type		difference_type;
-		typedef typename Iter::value_type		value_type;
-		typedef typename Iter::pointer			pointer;
-		typedef typename Iter::reference		reference;
+		typedef typename Iter::value_type			value_type;
+		typedef typename Iter::pointer				pointer;
+		typedef typename Iter::reference			reference;
 		typedef typename Iter::iterator_category	iterator_category;
 };
 
@@ -19,10 +31,10 @@ template < typename T >
 struct iterator_traits<T*>
 {
 	public:
-		typedef std::ptrdiff_t			difference_type;
-		typedef T				value_type;
-		typedef T*				pointer;
-		typedef T&				reference;
+		typedef std::ptrdiff_t					difference_type;
+		typedef T								value_type;
+		typedef T*								pointer;
+		typedef T&								reference;
 		typedef std::random_access_iterator_tag	iterator_category;
 };
 
@@ -30,10 +42,10 @@ template < typename T >
 struct iterator_traits<const T*>
 {
 	public:
-		typedef std::ptrdiff_t			difference_type;
-		typedef T				value_type;
-		typedef const T*			pointer;
-		typedef const T&			reference;
+		typedef std::ptrdiff_t					difference_type;
+		typedef T								value_type;
+		typedef const T*						pointer;
+		typedef const T&						reference;
 		typedef std::random_access_iterator_tag	iterator_category;
 };
 
@@ -42,12 +54,12 @@ class reverse_iterator
 {
 	public:
 		/** Member Types **/
-		typedef Iter							iterator_type;
+		typedef Iter												iterator_type;
 		typedef typename iterator_traits<Iter>::iterator_category	iterator_category;
-		typedef typename iterator_traits<Iter>::value_type		value_type;
+		typedef typename iterator_traits<Iter>::value_type			value_type;
 		typedef typename iterator_traits<Iter>::difference_type		difference_type;
-		typedef typename iterator_traits<Iter>::pointer			pointer;
-		typedef typename iterator_traits<Iter>::reference		reference;
+		typedef typename iterator_traits<Iter>::pointer				pointer;
+		typedef typename iterator_traits<Iter>::reference			reference;
 
 	private:
 		/** Member Attributes **/
@@ -55,7 +67,7 @@ class reverse_iterator
 
 	public:
 		/** Constructors **/
-		reverse_iterator(void) : _iter(nullptr) {}
+		reverse_iterator(void) : _iter(0) {}
 		explicit reverse_iterator(iterator_type it) : _iter(it) {}
 
 		template < typename U >
@@ -72,23 +84,23 @@ class reverse_iterator
 		}
 
 		/** Base **/
-		iterator_type		base(void) const
+		iterator_type	base(void) const
 		{
 			return (this->_iter);
 		}
 
 		/** Member Functions **/
-		reference		operator*(void) const
+		reference			operator*(void) const
 		{
 			return (*(--(iterator_type(this->_iter))));
 		}
 
-		reference		operator[](difference_type n)
+		reference			operator[](difference_type n)
 		{
 			return (this->base()[-n - 1]);
 		}
 
-		pointer			operator->(void) const
+		pointer				operator->(void) const
 		{
 			return (&(*(*this)));
 		}

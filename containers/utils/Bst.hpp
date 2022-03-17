@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   Bst.hpp                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: pgomez-a <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/17 11:21:40 by pgomez-a          #+#    #+#             */
+/*   Updated: 2022/03/17 11:49:21 by pgomez-a         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef BST_HPP
 # define BST_HPP
 
@@ -10,26 +22,26 @@ class	Bst
 {
 	public:
 		/** Member Types **/
-		typedef T						value_type;
-		typedef Compare						key_compare;
+		typedef T											value_type;
+		typedef Compare										key_compare;
 		typedef typename Alloc::template rebind<Bst>::other	allocator_type;
-		typedef typename Alloc::reference			reference;
-		typedef typename Alloc::const_reference			const_reference;
-		typedef typename Alloc::pointer				pointer;
-		typedef typename Alloc::const_pointer			const_pointer;
-		typedef std::size_t					size_type;
-		typedef std::ptrdiff_t					difference_type;
+		typedef typename Alloc::reference					reference;
+		typedef typename Alloc::const_reference				const_reference;
+		typedef typename Alloc::pointer						pointer;
+		typedef typename Alloc::const_pointer				const_pointer;
+		typedef std::size_t									size_type;
+		typedef std::ptrdiff_t								difference_type;
 
 		/** Member Attributes **/
 		value_type	data;
 		Bst*		left;
 		Bst*		right;
 		Bst*		parent;
-		int		balance;
+		int			balance;
 
 	private:
 		/** Private Member Attributes **/
-		key_compare	_comp;
+		key_compare		_comp;
 		allocator_type	_alloc;
 
 	public:
@@ -63,7 +75,7 @@ class	Bst
 		~Bst(void) {}
 
 		/** Member Functions **/
-		int	get_height(Bst* root) const
+		int			get_height(Bst* root) const
 		{
 			int	lheight;
 			int	rheight;
@@ -77,7 +89,7 @@ class	Bst
 			return (lheight + 1);
 		}
 
-		int	get_balance(Bst* root) const
+		int			get_balance(Bst* root) const
 		{
 			if (!root)
 				return (-1);
@@ -94,12 +106,7 @@ class	Bst
 			return (this->_comp);
 		}
 
-		allocator_type	get_allocator(void) const
-		{
-			return (this->_alloc);
-		}
-
-		Bst*	search(Bst* root, value_type data) const
+		Bst*		search(Bst* root, value_type data) const
 		{
 			if (!root || root->data.first == data.first)
 				return (root);
@@ -108,7 +115,7 @@ class	Bst
 			return (search(root->left, data));
 		}
 
-		Bst*&	insert(Bst*& root, value_type data)
+		Bst*&		insert(Bst*& root, value_type data)
 		{
 			if (!root)
 			{
@@ -144,7 +151,7 @@ class	Bst
 			return (root);
 		}
 
-		Bst*	deleteNode(Bst* root, value_type data)
+		Bst*		deleteNode(Bst* root, value_type data)
 		{
 			Bst*	tmp;
 			Bst*	parent;
@@ -197,26 +204,10 @@ class	Bst
 				}
 			}
 			root->balance = get_balance(root);
-			/**
-			if (root->balance == 2 && get_balance(root->left) >= 0)
-				root = rotateLeftLeft(root);
-			else if (root->balance == 2 && get_balance(root->left) == -1)
-			{
-				root->left = rotateRightRight(root->left);
-				root = rotateLeftLeft(root);
-			}
-			else if (root->balance == -2 && get_balance(root->right) <= 0)
-				root = rotateRightRight(root);
-			else if (root->balance == -2 && get_balance(root->right) == 1)
-			{
-				root->right = rotateLeftLeft(root->right);
-				root = rotateRightRight(root);
-			}
-			**/
 			return (root);
 		}
 
-		Bst*&	rotateLeftLeft(Bst*& root)
+		Bst*&		rotateLeftLeft(Bst*& root)
 		{
 			Bst*	tmp;
 			Bst*	tmp_succ;
@@ -236,7 +227,7 @@ class	Bst
 			return (root);
 		}
 
-		Bst*&	rotateRightRight(Bst*& root)
+		Bst*&		rotateRightRight(Bst*& root)
 		{
 			Bst*	tmp;
 			Bst*	tmp_succ;
@@ -256,7 +247,7 @@ class	Bst
 			return (root);
 		}
 
-		void	inorder(Bst* root)
+		void		inorder(Bst* root)
 		{
 			if (!root)
 				return ;
@@ -266,7 +257,7 @@ class	Bst
 			return ;
 		}
 
-		void	preorder(Bst* root)
+		void		preorder(Bst* root)
 		{
 			if (!root)
 				return ;
@@ -276,7 +267,7 @@ class	Bst
 			return ;
 		}
 
-		void	postorder(Bst* root)
+		void		postorder(Bst* root)
 		{
 			if (!root)
 				return ;
@@ -286,7 +277,7 @@ class	Bst
 			return ;
 		}
 
-		void	clean(Bst** root)
+		void		clean(Bst** root)
 		{
 			if (!(*root))
 				return ;
@@ -300,6 +291,12 @@ class	Bst
 			this->_alloc.deallocate(*root, 1);
 			*root = 0;
 			return ;
+		}
+
+		/** Allocator **/
+		allocator_type	get_allocator(void) const
+		{
+			return (this->_alloc);
 		}
 };
 
