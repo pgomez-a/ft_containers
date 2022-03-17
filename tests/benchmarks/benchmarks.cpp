@@ -40,9 +40,9 @@ void benchmark_map()
 	std::map<int, bool> sm1;
 	ft::map<int, bool> m1;
 
-	std = insert_growing(200000, sm1);
+	std = insert_growing(2000, sm1);
 	std::cout << "Std: " << std << std::endl;
-	ft = insert_growing(200000, m1);
+	ft = insert_growing(2000, m1);
 	std::cout << "Ft: " << ft << std::endl;
 
 	if ((double)ft / (double)std < 1.0000)
@@ -71,9 +71,9 @@ void benchmark_vector()
 	std::vector<int> sv1;
 	ft::vector<int> v1;
 
-	std = v_insert_growing(200000, sv1);
+	std = v_insert_growing(2000, sv1);
 	std::cout << "Std: " << std << std::endl;
-	ft = v_insert_growing(200000, v1);
+	ft = v_insert_growing(2000, v1);
 	std::cout << "Ft: " << ft << std::endl;
 
 	if ((double)ft / (double)std < 1.0000)
@@ -102,9 +102,9 @@ void benchmark_stack()
 	std::stack<int> st1;
 	ft::stack<int> s1;
 
-	std = s_insert_growing(200000, st1);
+	std = s_insert_growing(2000, st1);
 	std::cout << "Std: " << std << std::endl;
-	ft = s_insert_growing(200000, s1);
+	ft = s_insert_growing(2000, s1);
 	std::cout << "Ft: " << ft << std::endl;
 
 	if ((double)ft / (double)std < 1.0000)
