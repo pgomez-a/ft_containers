@@ -332,6 +332,8 @@ class map
 				if (comp == nullptr)
 					return (0);
 				this->_root = this->_Tree.deleteNode(this->_root, value_type(k, mapped_type()));
+				while (this->_root && this->_root->parent != nullptr && this->_root->parent->parent != nullptr)
+					this->_root = this->_root->parent;
 				this->_size -= 1;
 				if (this->_size == 0)
 					this->_end->left = nullptr;
@@ -353,13 +355,31 @@ class map
 
 		void				erase(iterator first, iterator last)
 		{
-			while (first != last)
+			int		len;
+			int		count;
+			iterator	ite;
+			
+			ite = first;
+			len = 0;
+			while (ite != last)
 			{
-				this->erase(first);
-				if (this->_size == 0)
-					break;
-				first++;
+				len++;
+				ite++;
 			}
+
+			key_type	tmp_list[len];
+
+			count = 0;
+			ite = first;
+			while (count < len)
+			{
+				tmp_list[count] = ite->first;
+				count++;
+				ite++;
+			}
+			count = 0;
+			while (count < len)
+				this->erase(tmp_list[count++]);
 			return ;
 		}
 
