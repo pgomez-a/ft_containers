@@ -1,5 +1,7 @@
 # ft_containers
 
+<img width="1345" alt="Graded by peers" src="https://user-images.githubusercontent.com/74931024/158885872-fdd611dc-ee8a-4b32-8317-67d03242224e.png">
+
 **If you want to learn more about IT topics, visit my website:** [**IA Notes**](https://ia-notes.com/)
 
 Once we've done CPP_Piscine, we're ready to step into the world of OOP. Our next big step will be to implement some of the most used **STL containers**, so we are going to work directly with our beloved templates as we discover their great potential. So far, we only know what a vector is but ... **how does it work? How is it implemented? How do you manage memory allocation? How does a stack encapsulate its elements so that only a few member functions can be used? How do iterators work? All these questions, and many more, will be discovered and understood with ft_containers.**<br>
